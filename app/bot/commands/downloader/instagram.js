@@ -9,7 +9,12 @@ Command({
     label : 'downloader'
   },
   run: async ({ m }) => {
-    const body = m.content.textWithoutCommand.trim();
+    let body = null;
+    if (m.quoted) {
+      body = m.quoted.content.text.match(/(https?):\/\/[\-A-Z0-9+&@#\/%?=~_|!:,.;]*[\-A-Z0-9+&@#\/%=~_|]/ig)[0] || null;
+    } else {
+      body = m.content.textWithoutCommand.trim();
+    }
     if (!body) return m.reply(__('cmd.downloader.ig.ex', { command: m.content.command }));
 
     const res = await snapsave(body);

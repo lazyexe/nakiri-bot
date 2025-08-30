@@ -9,7 +9,12 @@ Command({
     label : 'downloader'
   },
   run: async ({ m }) => {
-    const body = m.content.textWithoutCommand.trim();
+    let body = null;
+    if (m.quoted) {
+      body = m.quoted.content.text.match(/(https?):\/\/[\-A-Z0-9+&@#\/%?=~_|!:,.;]*[\-A-Z0-9+&@#\/%=~_|]/ig)[0] || null;
+    } else {
+      body = m.content.textWithoutCommand.trim();
+    }
     if (!body) return m.reply(__('cmd.downloader.tt.ex', { command: m.content.command }));
     // if (!(/^(https?:\/\/)?(www\.|m\.|vm\.|vt\.)?(tiktok\.com|bytef\.ly)(\/@[\w\d\.]+\/?|\/v\/[\w\d\.]+\.html|\/video\/\d+|\/[a-zA-Z0-9_\-]{8,15}|(\/@[\w\d\.]+)?\/video\/\d+)*(\?[\w=&%-]*)?(#.*)?$/i).test(body)) return m.reply(__('cmd.downloader.fb.ex', { command: m.content.command }));
 

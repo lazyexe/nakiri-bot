@@ -1,4 +1,4 @@
-const { Command, tags } = require('../../utils/command.js');
+const { Command, tags, commands } = require('../../utils/command.js');
 const { DateTime } = require('luxon');
 
 Command({
@@ -6,6 +6,12 @@ Command({
   description: 'Show menu',
   alias: ['help', 'menu'],
   run: async ({ m }) => {
+    let highlightMenu = [
+      'anonymouschat-start',
+      'tools-media-to-sticker',
+      'tools-sticker-to-image',
+      'tools-notes'
+    ];
     let text = '';
     let label = __('cmd.menu.all');
     text += __('cmd.menu.welcome', { name: m.pushName, time: time2() });
@@ -13,6 +19,15 @@ Command({
     text += __('cmd.menu.description', { command: m.content.prefix + 'start' });
     text += '\n\n';
     text += String.fromCharCode(8206).repeat(4001);
+    if (highlightMenu.length > 0) {
+      text += '`❖ HIGHLIGHT MENU`\n';
+      for (let i = 0; i < highlightMenu.length; i++) {
+        const command = commands.get(highlightMenu[i]);
+        if (!command) continue;
+        text += `▷  ${m.content.prefix + command.alias[0]} ${command?.example ? '_' + command.example + '_' : ''}\n`;
+      }
+      text += '\n';
+    }
     if(m.content.textWithoutCommand) {
       let filterMenu = tags.get(m.content.textWithoutCommand.toLowerCase());
       if(!filterMenu) return;

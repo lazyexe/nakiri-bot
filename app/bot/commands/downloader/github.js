@@ -7,7 +7,12 @@ Command({
   tags: { label: 'downloader' },
   run: async ({ m }) => {
     try {
-      let url = m.content.textWithoutCommand.trim();
+      let url = null;
+      if (m.quoted) {
+        url = m.quoted.content.text.match(/(https?):\/\/[\-A-Z0-9+&@#\/%?=~_|!:,.;]*[\-A-Z0-9+&@#\/%=~_|]/ig)[0] || null;
+      } else {
+        url = m.content.textWithoutCommand.trim();
+      }
       if (!url) return m.reply(__('cmd.downloader.github.ex', { command: m.content.command }));
       if (!url.startsWith('https://github.com/')) return m.reply(__('cmd.downloader.github.ex', { command: m.content.command }));
       if (url.endsWith('.git')) url = url.slice(0, -4);
