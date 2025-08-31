@@ -171,6 +171,23 @@
             "anonymousChat" : {
                 "onlyPrivate": "_Tidak bisa di group. Silahkan gunakan di private chat._"
             }
+        },
+
+        "game": {
+            "jackpot": {
+                "ex": "Contoh: {command} 50\nList Bet:\n▷ 50 untuk 1x spin\n▷ 100 untuk 2x spin\n▷ 150 untuk 3x spin\n▷ 200 untuk 4x spin\n▷ 250 untuk 5x spin",
+                "max": "Maksimal taruhan adalah {maxBet}.",
+                "template": "Memulai {numSpins} putaran...",
+                "jackpot": "🎉 JACKPOT!",
+                "twomatch": "✨ Lumayan!",
+                "lose": "😔 Kalah!",
+                "result": "*Hasil Akhir ({numSpins} Putaran)*",
+                "win": "Menang",
+                "totalBet": "*Total Taruhan:* {totalBet}",
+                "totalWin": "*Total Kemenangan:* {totalWin}",
+                "profit": "*Keuntungan:* {profit}",
+                "loss": "*Kerugian:* {loss}"
+            }
         }
     },
     

@@ -21,11 +21,8 @@ Command({
 
     if (!toJid.includes('@')) toJid = toJid + '@s.whatsapp.net';
 
-    if (amount <= 1) return m.reply(__('cmd.personal.transfer.amountMinTransfer'));
-
     try {
       const transaction = await currencyInstance.transfer({ fromJid: m.sender, toJid, amount: Number(amount) });
-
       m.reply(__('cmd.personal.transfer.success', { amount: transaction.amount, pushName: transaction.users.to.pushName }));
     } catch (e) {
       return m.reply(e.message);

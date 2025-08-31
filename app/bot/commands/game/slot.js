@@ -65,25 +65,16 @@ function randomSpin() {
 Command({
   name: 'game-slot',
   description: 'Main slot dengan probabilitas terkontrol',
-  alias: ['slot', 'jackpot'],
+  alias: ['jackpot', 'slot'],
+  tags: { label: 'game' },
   run: async ({ sock, m }) => {
     const baseBet = 50;
     const maxBet = 250;
     const bet = parseInt(m.content.textWithoutCommand.trim());
 
-    if (isNaN(bet) || bet < baseBet || bet % baseBet !== 0) {
-      await m.sendMessage(m.chat, {
-        text: `Masukkan jumlah taruhan kelipatan ${baseBet}.\nContoh: ${m.content.command} 150`
-      }, { quoted: m });
-      return;
-    }
+    if (isNaN(bet) || bet < baseBet || bet % baseBet !== 0) return m.reply(__('cmd.game.jackpot.ex', { command: m.content.command }));
 
-    if (bet > maxBet) {
-      await m.sendMessage(m.chat, {
-        text: `Maksimum taruhan adalah ${maxBet}.`
-      }, { quoted: m });
-      return;
-    }
+    if (bet > maxBet) return m.reply(__('cmd.game.jackpot.max', { maxBet }));
 
     try {
       await currencyInstance.transfer({ fromJid: m.senderJid, toJid: '0@s.whatsapp.net', amount: bet });
@@ -95,15 +86,13 @@ Command({
     let totalWin = 0;
     let allResults = [];
 
-    let msg = await sock.sendMessage(m.chat, {
-      text: `✅ Memulai ${numSpins} putaran...\n\nSpin 1/${numSpins} | ${randomSpin().join(' ')} |`
-    }, { quoted: m });
+    const msg = await m.reply(__('cmd.game.jackpot.template', { numSpins }) + `\n\nSpin 1/${numSpins} | ${randomSpin().join(' ')} |`);
 
     for (let i = 0; i < numSpins; i++) {
       for (let j = 0; j < 6; j++) {
         await delay(450);
         await sock.sendMessage(m.chat, {
-          text: `✅ Memulai ${numSpins} putaran...\n\nSpin ${i + 1}/${numSpins} | ${randomSpin().join(' ')} |` ,
+          text: __('cmd.game.jackpot.template', { numSpins }) + `\n\nSpin ${i + 1}/${numSpins} | ${randomSpin().join(' ')} |` ,
           edit: msg.key
         });
       }
@@ -116,11 +105,11 @@ Command({
 
       let label = '';
       if (outcome === 'jackpot') {
-        label = '🎉 JACKPOT!';
+        label = __('cmd.game.jackpot.jackpot');
       } else if (outcome === 'twomatch') {
-        label = '✨ Lumayan!';
+        label = __('cmd.game.jackpot.twomatch');
       } else {
-        label = '😢 Kalah.';
+        label = __('cmd.game.jackpot.lose');
       }
 
       allResults.push({
@@ -133,19 +122,29 @@ Command({
       await delay(1000);
 
       await sock.sendMessage(m.chat, {
-        text: `✅ Memulai ${numSpins} putaran...\n\nSpin ${i + 1}/${numSpins} | ${finalSpin.join(' ')} |\n${label}` ,
+        text: __('cmd.game.jackpot.template', { numSpins }) + `\n\nSpin ${i + 1}/${numSpins} | ${finalSpin.join(' ')} |\n${label}` ,
         edit: msg.key
       });
     }
 
     await delay(1500);
 
-    let summaryText = `*Hasil Akhir (${numSpins} Putaran)*\n`;
+    let summaryText = __('cmd.game.jackpot.result', { numSpins });
+    summaryText += '\n';
     allResults.forEach(res => {
-      summaryText += `\n🎰 Spin ${res.spin}: ${res.result.join(' ')}\n> ${res.outcomeLabel} Menang ${res.win}!\n`;
+      summaryText += `\n🎰 Spin ${res.spin}: ${res.result.join(' ')}\n> ${res.outcomeLabel} ${__('cmd.game.jackpot.win')} ${res.win}!\n`;
     });
 
-    summaryText += `\n*Total Taruhan:* ${bet}\n*Total Kemenangan:* ${totalWin}\n*${totalWin > bet ? 'Keuntungan' : 'Kerugian'}:* ${totalWin - bet}`;
+    summaryText += '\n';
+    summaryText += __('cmd.game.jackpot.totalBet', { totalBet: bet });
+    summaryText += '\n';
+    summaryText += __('cmd.game.jackpot.totalWin', { totalWin });
+    summaryText += '\n';
+    if (totalWin > bet) {
+      summaryText += __('cmd.game.jackpot.profit', { profit: totalWin - bet });
+    } else {
+      summaryText += __('cmd.game.jackpot.loss', { loss: bet - totalWin });
+    }
 
     if (totalWin !== 0) {
       try {
