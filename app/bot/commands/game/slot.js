@@ -145,7 +145,15 @@ Command({
       summaryText += `\n🎰 Spin ${res.spin}: ${res.result.join(' ')}\n> ${res.outcomeLabel} Menang ${res.win}!\n`;
     });
 
-    summaryText += `\n*Total Taruhan:* ${bet}\n*Total Kemenangan:* ${totalWin}\n*Keuntungan/Kerugian:* ${totalWin - bet}`;
+    summaryText += `\n*Total Taruhan:* ${bet}\n*Total Kemenangan:* ${totalWin}\n*${totalWin > bet ? 'Keuntungan' : 'Kerugian'}:* ${totalWin - bet}`;
+
+    if (totalWin !== 0) {
+      try {
+        await currencyInstance.transfer({ fromJid: '0@s.whatsapp.net', toJid: m.senderJid, amount: totalWin });
+      } catch (e) {
+        return await m.reply(e.message);
+      }
+    }
 
     await sock.sendMessage(m.chat, { text: summaryText, edit: msg.key });
   }

@@ -196,6 +196,7 @@
         "invalidAmount": "Jumlah tidak valid.",
         "sameJid": "Tidak bisa mengirim ke diri sendiri.",
         "userNotFound": "Pengguna tidak terdaftar.",
-        "insufficientBalance": "Saldo tidak mencukupi."
+        "insufficientBalance": "Saldo tidak mencukupi.",
+        "insufficientBalanceWithFee": "Saldo tidak mencukupi untuk melakukan transfer sebesar {amount} dan biaya sebesar {fee}."
     }
 }

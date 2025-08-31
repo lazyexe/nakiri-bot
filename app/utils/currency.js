@@ -109,8 +109,12 @@ class Currency {
         const fee = this.roundAmount(amount * this.transferFee);
         const totalDeduct = this.roundAmount(amount + fee);
 
-        if (fromUser.balance < totalDeduct) {
+        if (fromUser.balance < amount) {
           throw new Error(__('currency.insufficientBalance'));
+        }
+
+        if (fromUser.balance < totalDeduct) {
+          throw new Error(__('currency.insufficientBalanceWithFee', { amount, fee }));
         }
 
         // Create transaction record
