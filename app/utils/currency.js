@@ -13,7 +13,7 @@ class Currency {
     this.isProcessing = false;
     this.timeoutMiner = null;
     this.lastMinerIndex = 0;
-    this.MINING_TIMEOUT_MINUTES = 0.1;
+    this.MINING_TIMEOUT_MINUTES = 10;
     this.PRECISION_MULTIPLIER = 100000000;
     this.MIN_REWARD = 0.00000001;
     this.ev = new EventEmitter();
@@ -95,7 +95,7 @@ class Currency {
     }
 
     try {
-      return await prisma.$transaction(async (tx) => {
+      const transferResult = await prisma.$transaction(async (tx) => {
         // Fetch users concurrently
         const [fromUser, toUser] = await Promise.all([
           tx.user.findUnique({ where: { jid: fromJid } }),
@@ -139,8 +139,6 @@ class Currency {
           }
         });
 
-        await this.minerHandler();
-
         return {
           id: transaction.id,
           amount: this.roundAmount(amount),
@@ -159,6 +157,10 @@ class Currency {
           },
         };
       });
+
+      await this.minerHandler();
+
+      return transferResult;
     } catch (error) {
       throw error;
     }
@@ -321,9 +323,9 @@ class Currency {
 
           this.ev.emit('miner', minerMap);
         }
-
-        this.isProcessing = false;
       });
+
+      this.isProcessing = false;
     } catch (error) {
       this.isProcessing = false;
       throw error;
@@ -516,7 +518,11 @@ class Currency {
       }
     });
 
-    return (metadata.currentSupply === inCirculation._sum.balance);
+    return {
+      inCirculation: inCirculation._sum.balance,
+      currentSupply: metadata.currentSupply,
+      status: (metadata.currentSupply === inCirculation._sum.balance)
+    };
   }
 
   /**
