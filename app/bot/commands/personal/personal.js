@@ -11,7 +11,7 @@ Command({
   run: async ({ sock, m }) => {
     let text = '*❖ [ Group Status ] ❖*\n';
     text += `▸ Name : *${m.pushName}*\n`;
-    text += `▸ Bitcoin : *${m.db.user.balance.toLocaleString()}*\n`;
+    text += `▸ Balance : *${m.db.user.balance.toLocaleString()}*\n`;
     text += `▸ Exp : *${m.db.user.exp}*\n`;
     text += `▸ Subscribe : *${m.db.user.subscription.type.toUpperCase()}*\n`;
     text += `▸ Registered : *${luxon.DateTime.fromJSDate(new Date(m.db.user.createdAt)).toRelative()}*`;

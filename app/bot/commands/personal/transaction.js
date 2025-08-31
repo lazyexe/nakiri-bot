@@ -27,11 +27,11 @@ Command({
       let text = '*`❖ Transaction History`*\n\n';
       for (const transaction of history) {
         if (transaction.fromAddress == jid) {
-          text += `> Transfer To : ${transaction.toAddress.split('@')[0]}\n`;
+          text += `> Transfer To : ${m.isGroup ? transaction.toAddress.split('@')[0].slice(0, 3) + 'xxx' : transaction.toAddress.split('@')[0]}\n`;
           text += `> Amount : ${transaction.amount}\n`;
           text += `> Fee : ${transaction.fee}\n\n`;
         } else {
-          text += `> Receive From : ${transaction.fromAddress.split('@')[0]}\n`;
+          text += `> Receive From : ${m.isGroup ? transaction.fromAddress.split('@')[0].slice(0, 3) + 'xxx' : transaction.fromAddress.split('@')[0]}\n`;
           text += `> Amount : ${transaction.amount}\n`;
           text += `> Fee : ${transaction.fee}\n\n`;
         }

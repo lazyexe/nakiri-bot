@@ -1581,11 +1581,11 @@ export namespace Prisma {
    */
 
   export type GroupCountOutputType = {
-    participants: number
+    GroupParticipant: number
   }
 
   export type GroupCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    participants?: boolean | GroupCountOutputTypeCountParticipantsArgs
+    GroupParticipant?: boolean | GroupCountOutputTypeCountGroupParticipantArgs
   }
 
   // Custom InputTypes
@@ -1602,7 +1602,7 @@ export namespace Prisma {
   /**
    * GroupCountOutputType without action
    */
-  export type GroupCountOutputTypeCountParticipantsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GroupCountOutputTypeCountGroupParticipantArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GroupParticipantWhereInput
   }
 
@@ -1612,15 +1612,17 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
-    sentTransactions: number
-    receivedTransactions: number
-    Note: number
+    sentTransaction: number
+    receivedTransaction: number
+    minerTransaction: number
+    NoteAuthor: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    sentTransactions?: boolean | UserCountOutputTypeCountSentTransactionsArgs
-    receivedTransactions?: boolean | UserCountOutputTypeCountReceivedTransactionsArgs
-    Note?: boolean | UserCountOutputTypeCountNoteArgs
+    sentTransaction?: boolean | UserCountOutputTypeCountSentTransactionArgs
+    receivedTransaction?: boolean | UserCountOutputTypeCountReceivedTransactionArgs
+    minerTransaction?: boolean | UserCountOutputTypeCountMinerTransactionArgs
+    NoteAuthor?: boolean | UserCountOutputTypeCountNoteAuthorArgs
   }
 
   // Custom InputTypes
@@ -1637,21 +1639,28 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountSentTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCountOutputTypeCountSentTransactionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TransactionWhereInput
   }
 
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountReceivedTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCountOutputTypeCountReceivedTransactionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TransactionWhereInput
   }
 
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountNoteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCountOutputTypeCountMinerTransactionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TransactionWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountNoteAuthorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: NoteWhereInput
   }
 
@@ -3771,7 +3780,7 @@ export namespace Prisma {
     lang?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    participants?: boolean | Group$participantsArgs<ExtArgs>
+    GroupParticipant?: boolean | Group$GroupParticipantArgs<ExtArgs>
     _count?: boolean | GroupCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["group"]>
 
@@ -3798,14 +3807,14 @@ export namespace Prisma {
 
   export type GroupOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "groupId" | "subject" | "visible" | "link" | "publicFeatures" | "accessFeatures" | "joinApprovalMode" | "maxStrike" | "wordBlocker" | "antiMention" | "welcome" | "activityScore" | "lang" | "createdAt" | "updatedAt", ExtArgs["result"]["group"]>
   export type GroupInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    participants?: boolean | Group$participantsArgs<ExtArgs>
+    GroupParticipant?: boolean | Group$GroupParticipantArgs<ExtArgs>
     _count?: boolean | GroupCountOutputTypeDefaultArgs<ExtArgs>
   }
 
   export type $GroupPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Group"
     objects: {
-      participants: Prisma.$GroupParticipantPayload<ExtArgs>[]
+      GroupParticipant: Prisma.$GroupParticipantPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4187,7 +4196,7 @@ export namespace Prisma {
    */
   export interface Prisma__GroupClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    participants<T extends Group$participantsArgs<ExtArgs> = {}>(args?: Subset<T, Group$participantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    GroupParticipant<T extends Group$GroupParticipantArgs<ExtArgs> = {}>(args?: Subset<T, Group$GroupParticipantArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4603,9 +4612,9 @@ export namespace Prisma {
   }
 
   /**
-   * Group.participants
+   * Group.GroupParticipant
    */
-  export type Group$participantsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Group$GroupParticipantArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the GroupParticipant
      */
@@ -6869,9 +6878,10 @@ export namespace Prisma {
     balance?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    sentTransactions?: boolean | User$sentTransactionsArgs<ExtArgs>
-    receivedTransactions?: boolean | User$receivedTransactionsArgs<ExtArgs>
-    Note?: boolean | User$NoteArgs<ExtArgs>
+    sentTransaction?: boolean | User$sentTransactionArgs<ExtArgs>
+    receivedTransaction?: boolean | User$receivedTransactionArgs<ExtArgs>
+    minerTransaction?: boolean | User$minerTransactionArgs<ExtArgs>
+    NoteAuthor?: boolean | User$NoteAuthorArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6893,18 +6903,20 @@ export namespace Prisma {
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "jid" | "pushName" | "exp" | "subscription" | "banStatus" | "token" | "lang" | "balance" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    sentTransactions?: boolean | User$sentTransactionsArgs<ExtArgs>
-    receivedTransactions?: boolean | User$receivedTransactionsArgs<ExtArgs>
-    Note?: boolean | User$NoteArgs<ExtArgs>
+    sentTransaction?: boolean | User$sentTransactionArgs<ExtArgs>
+    receivedTransaction?: boolean | User$receivedTransactionArgs<ExtArgs>
+    minerTransaction?: boolean | User$minerTransactionArgs<ExtArgs>
+    NoteAuthor?: boolean | User$NoteAuthorArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      sentTransactions: Prisma.$TransactionPayload<ExtArgs>[]
-      receivedTransactions: Prisma.$TransactionPayload<ExtArgs>[]
-      Note: Prisma.$NotePayload<ExtArgs>[]
+      sentTransaction: Prisma.$TransactionPayload<ExtArgs>[]
+      receivedTransaction: Prisma.$TransactionPayload<ExtArgs>[]
+      minerTransaction: Prisma.$TransactionPayload<ExtArgs>[]
+      NoteAuthor: Prisma.$NotePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7281,9 +7293,10 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    sentTransactions<T extends User$sentTransactionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sentTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    receivedTransactions<T extends User$receivedTransactionsArgs<ExtArgs> = {}>(args?: Subset<T, User$receivedTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    Note<T extends User$NoteArgs<ExtArgs> = {}>(args?: Subset<T, User$NoteArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sentTransaction<T extends User$sentTransactionArgs<ExtArgs> = {}>(args?: Subset<T, User$sentTransactionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    receivedTransaction<T extends User$receivedTransactionArgs<ExtArgs> = {}>(args?: Subset<T, User$receivedTransactionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    minerTransaction<T extends User$minerTransactionArgs<ExtArgs> = {}>(args?: Subset<T, User$minerTransactionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    NoteAuthor<T extends User$NoteAuthorArgs<ExtArgs> = {}>(args?: Subset<T, User$NoteAuthorArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7694,9 +7707,9 @@ export namespace Prisma {
   }
 
   /**
-   * User.sentTransactions
+   * User.sentTransaction
    */
-  export type User$sentTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$sentTransactionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Transaction
      */
@@ -7718,9 +7731,9 @@ export namespace Prisma {
   }
 
   /**
-   * User.receivedTransactions
+   * User.receivedTransaction
    */
-  export type User$receivedTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$receivedTransactionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Transaction
      */
@@ -7742,9 +7755,33 @@ export namespace Prisma {
   }
 
   /**
-   * User.Note
+   * User.minerTransaction
    */
-  export type User$NoteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$minerTransactionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    where?: TransactionWhereInput
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    cursor?: TransactionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
+   * User.NoteAuthor
+   */
+  export type User$NoteAuthorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Note
      */
@@ -7812,7 +7849,8 @@ export namespace Prisma {
     toAddress: string | null
     amount: number | null
     fee: number | null
-    status: string | null
+    minerJid: string | null
+    description: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -7823,7 +7861,8 @@ export namespace Prisma {
     toAddress: string | null
     amount: number | null
     fee: number | null
-    status: string | null
+    minerJid: string | null
+    description: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -7834,7 +7873,8 @@ export namespace Prisma {
     toAddress: number
     amount: number
     fee: number
-    status: number
+    minerJid: number
+    description: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -7857,7 +7897,8 @@ export namespace Prisma {
     toAddress?: true
     amount?: true
     fee?: true
-    status?: true
+    minerJid?: true
+    description?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -7868,7 +7909,8 @@ export namespace Prisma {
     toAddress?: true
     amount?: true
     fee?: true
-    status?: true
+    minerJid?: true
+    description?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -7879,7 +7921,8 @@ export namespace Prisma {
     toAddress?: true
     amount?: true
     fee?: true
-    status?: true
+    minerJid?: true
+    description?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -7977,7 +8020,8 @@ export namespace Prisma {
     toAddress: string
     amount: number
     fee: number
-    status: string
+    minerJid: string
+    description: string | null
     createdAt: Date
     updatedAt: Date
     _count: TransactionCountAggregateOutputType | null
@@ -8007,11 +8051,13 @@ export namespace Prisma {
     toAddress?: boolean
     amount?: boolean
     fee?: boolean
-    status?: boolean
+    minerJid?: boolean
+    description?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     fromUser?: boolean | Transaction$fromUserArgs<ExtArgs>
     toUser?: boolean | Transaction$toUserArgs<ExtArgs>
+    minerUser?: boolean | Transaction$minerUserArgs<ExtArgs>
   }, ExtArgs["result"]["transaction"]>
 
 
@@ -8022,15 +8068,17 @@ export namespace Prisma {
     toAddress?: boolean
     amount?: boolean
     fee?: boolean
-    status?: boolean
+    minerJid?: boolean
+    description?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fromAddress" | "toAddress" | "amount" | "fee" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
+  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fromAddress" | "toAddress" | "amount" | "fee" | "minerJid" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
   export type TransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     fromUser?: boolean | Transaction$fromUserArgs<ExtArgs>
     toUser?: boolean | Transaction$toUserArgs<ExtArgs>
+    minerUser?: boolean | Transaction$minerUserArgs<ExtArgs>
   }
 
   export type $TransactionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8038,6 +8086,7 @@ export namespace Prisma {
     objects: {
       fromUser: Prisma.$UserPayload<ExtArgs> | null
       toUser: Prisma.$UserPayload<ExtArgs> | null
+      minerUser: Prisma.$UserPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8045,7 +8094,8 @@ export namespace Prisma {
       toAddress: string
       amount: number
       fee: number
-      status: string
+      minerJid: string
+      description: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["transaction"]>
@@ -8413,6 +8463,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     fromUser<T extends Transaction$fromUserArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$fromUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     toUser<T extends Transaction$toUserArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$toUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    minerUser<T extends Transaction$minerUserArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$minerUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8447,7 +8498,8 @@ export namespace Prisma {
     readonly toAddress: FieldRef<"Transaction", 'String'>
     readonly amount: FieldRef<"Transaction", 'Float'>
     readonly fee: FieldRef<"Transaction", 'Float'>
-    readonly status: FieldRef<"Transaction", 'String'>
+    readonly minerJid: FieldRef<"Transaction", 'String'>
+    readonly description: FieldRef<"Transaction", 'String'>
     readonly createdAt: FieldRef<"Transaction", 'DateTime'>
     readonly updatedAt: FieldRef<"Transaction", 'DateTime'>
   }
@@ -8842,6 +8894,25 @@ export namespace Prisma {
    * Transaction.toUser
    */
   export type Transaction$toUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Transaction.minerUser
+   */
+  export type Transaction$minerUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the User
      */
@@ -10998,7 +11069,8 @@ export namespace Prisma {
     toAddress: 'toAddress',
     amount: 'amount',
     fee: 'fee',
-    status: 'status',
+    minerJid: 'minerJid',
+    description: 'description',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -11262,7 +11334,7 @@ export namespace Prisma {
     lang?: StringFilter<"Group"> | string
     createdAt?: DateTimeFilter<"Group"> | Date | string
     updatedAt?: DateTimeFilter<"Group"> | Date | string
-    participants?: GroupParticipantListRelationFilter
+    GroupParticipant?: GroupParticipantListRelationFilter
   }
 
   export type GroupOrderByWithRelationInput = {
@@ -11282,7 +11354,7 @@ export namespace Prisma {
     lang?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    participants?: GroupParticipantOrderByRelationAggregateInput
+    GroupParticipant?: GroupParticipantOrderByRelationAggregateInput
   }
 
   export type GroupWhereUniqueInput = Prisma.AtLeast<{
@@ -11305,7 +11377,7 @@ export namespace Prisma {
     lang?: StringFilter<"Group"> | string
     createdAt?: DateTimeFilter<"Group"> | Date | string
     updatedAt?: DateTimeFilter<"Group"> | Date | string
-    participants?: GroupParticipantListRelationFilter
+    GroupParticipant?: GroupParticipantListRelationFilter
   }, "id" | "groupId">
 
   export type GroupOrderByWithAggregationInput = {
@@ -11494,9 +11566,10 @@ export namespace Prisma {
     balance?: FloatFilter<"User"> | number
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    sentTransactions?: TransactionListRelationFilter
-    receivedTransactions?: TransactionListRelationFilter
-    Note?: NoteListRelationFilter
+    sentTransaction?: TransactionListRelationFilter
+    receivedTransaction?: TransactionListRelationFilter
+    minerTransaction?: TransactionListRelationFilter
+    NoteAuthor?: NoteListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -11511,9 +11584,10 @@ export namespace Prisma {
     balance?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    sentTransactions?: TransactionOrderByRelationAggregateInput
-    receivedTransactions?: TransactionOrderByRelationAggregateInput
-    Note?: NoteOrderByRelationAggregateInput
+    sentTransaction?: TransactionOrderByRelationAggregateInput
+    receivedTransaction?: TransactionOrderByRelationAggregateInput
+    minerTransaction?: TransactionOrderByRelationAggregateInput
+    NoteAuthor?: NoteOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -11531,9 +11605,10 @@ export namespace Prisma {
     balance?: FloatFilter<"User"> | number
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    sentTransactions?: TransactionListRelationFilter
-    receivedTransactions?: TransactionListRelationFilter
-    Note?: NoteListRelationFilter
+    sentTransaction?: TransactionListRelationFilter
+    receivedTransaction?: TransactionListRelationFilter
+    minerTransaction?: TransactionListRelationFilter
+    NoteAuthor?: NoteListRelationFilter
   }, "id" | "jid">
 
   export type UserOrderByWithAggregationInput = {
@@ -11581,11 +11656,13 @@ export namespace Prisma {
     toAddress?: StringFilter<"Transaction"> | string
     amount?: FloatFilter<"Transaction"> | number
     fee?: FloatFilter<"Transaction"> | number
-    status?: StringFilter<"Transaction"> | string
+    minerJid?: StringFilter<"Transaction"> | string
+    description?: StringNullableFilter<"Transaction"> | string | null
     createdAt?: DateTimeFilter<"Transaction"> | Date | string
     updatedAt?: DateTimeFilter<"Transaction"> | Date | string
     fromUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     toUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    minerUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }
 
   export type TransactionOrderByWithRelationInput = {
@@ -11594,11 +11671,13 @@ export namespace Prisma {
     toAddress?: SortOrder
     amount?: SortOrder
     fee?: SortOrder
-    status?: SortOrder
+    minerJid?: SortOrder
+    description?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     fromUser?: UserOrderByWithRelationInput
     toUser?: UserOrderByWithRelationInput
+    minerUser?: UserOrderByWithRelationInput
   }
 
   export type TransactionWhereUniqueInput = Prisma.AtLeast<{
@@ -11610,11 +11689,13 @@ export namespace Prisma {
     toAddress?: StringFilter<"Transaction"> | string
     amount?: FloatFilter<"Transaction"> | number
     fee?: FloatFilter<"Transaction"> | number
-    status?: StringFilter<"Transaction"> | string
+    minerJid?: StringFilter<"Transaction"> | string
+    description?: StringNullableFilter<"Transaction"> | string | null
     createdAt?: DateTimeFilter<"Transaction"> | Date | string
     updatedAt?: DateTimeFilter<"Transaction"> | Date | string
     fromUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     toUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    minerUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }, "id">
 
   export type TransactionOrderByWithAggregationInput = {
@@ -11623,7 +11704,8 @@ export namespace Prisma {
     toAddress?: SortOrder
     amount?: SortOrder
     fee?: SortOrder
-    status?: SortOrder
+    minerJid?: SortOrder
+    description?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: TransactionCountOrderByAggregateInput
@@ -11642,7 +11724,8 @@ export namespace Prisma {
     toAddress?: StringWithAggregatesFilter<"Transaction"> | string
     amount?: FloatWithAggregatesFilter<"Transaction"> | number
     fee?: FloatWithAggregatesFilter<"Transaction"> | number
-    status?: StringWithAggregatesFilter<"Transaction"> | string
+    minerJid?: StringWithAggregatesFilter<"Transaction"> | string
+    description?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Transaction"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Transaction"> | Date | string
   }
@@ -11900,7 +11983,7 @@ export namespace Prisma {
     lang?: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    participants?: GroupParticipantCreateNestedManyWithoutGroupInput
+    GroupParticipant?: GroupParticipantCreateNestedManyWithoutGroupInput
   }
 
   export type GroupUncheckedCreateInput = {
@@ -11920,7 +12003,7 @@ export namespace Prisma {
     lang?: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    participants?: GroupParticipantUncheckedCreateNestedManyWithoutGroupInput
+    GroupParticipant?: GroupParticipantUncheckedCreateNestedManyWithoutGroupInput
   }
 
   export type GroupUpdateInput = {
@@ -11939,7 +12022,7 @@ export namespace Prisma {
     lang?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    participants?: GroupParticipantUpdateManyWithoutGroupNestedInput
+    GroupParticipant?: GroupParticipantUpdateManyWithoutGroupNestedInput
   }
 
   export type GroupUncheckedUpdateInput = {
@@ -11958,7 +12041,7 @@ export namespace Prisma {
     lang?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    participants?: GroupParticipantUncheckedUpdateManyWithoutGroupNestedInput
+    GroupParticipant?: GroupParticipantUncheckedUpdateManyWithoutGroupNestedInput
   }
 
   export type GroupCreateManyInput = {
@@ -12024,7 +12107,7 @@ export namespace Prisma {
     score?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    group: GroupCreateNestedOneWithoutParticipantsInput
+    group: GroupCreateNestedOneWithoutGroupParticipantInput
   }
 
   export type GroupParticipantUncheckedCreateInput = {
@@ -12045,7 +12128,7 @@ export namespace Prisma {
     score?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    group?: GroupUpdateOneRequiredWithoutParticipantsNestedInput
+    group?: GroupUpdateOneRequiredWithoutGroupParticipantNestedInput
   }
 
   export type GroupParticipantUncheckedUpdateInput = {
@@ -12152,9 +12235,10 @@ export namespace Prisma {
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    sentTransactions?: TransactionCreateNestedManyWithoutFromUserInput
-    receivedTransactions?: TransactionCreateNestedManyWithoutToUserInput
-    Note?: NoteCreateNestedManyWithoutAuthorInput
+    sentTransaction?: TransactionCreateNestedManyWithoutFromUserInput
+    receivedTransaction?: TransactionCreateNestedManyWithoutToUserInput
+    minerTransaction?: TransactionCreateNestedManyWithoutMinerUserInput
+    NoteAuthor?: NoteCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -12169,9 +12253,10 @@ export namespace Prisma {
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    sentTransactions?: TransactionUncheckedCreateNestedManyWithoutFromUserInput
-    receivedTransactions?: TransactionUncheckedCreateNestedManyWithoutToUserInput
-    Note?: NoteUncheckedCreateNestedManyWithoutAuthorInput
+    sentTransaction?: TransactionUncheckedCreateNestedManyWithoutFromUserInput
+    receivedTransaction?: TransactionUncheckedCreateNestedManyWithoutToUserInput
+    minerTransaction?: TransactionUncheckedCreateNestedManyWithoutMinerUserInput
+    NoteAuthor?: NoteUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUpdateInput = {
@@ -12185,9 +12270,10 @@ export namespace Prisma {
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sentTransactions?: TransactionUpdateManyWithoutFromUserNestedInput
-    receivedTransactions?: TransactionUpdateManyWithoutToUserNestedInput
-    Note?: NoteUpdateManyWithoutAuthorNestedInput
+    sentTransaction?: TransactionUpdateManyWithoutFromUserNestedInput
+    receivedTransaction?: TransactionUpdateManyWithoutToUserNestedInput
+    minerTransaction?: TransactionUpdateManyWithoutMinerUserNestedInput
+    NoteAuthor?: NoteUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -12201,9 +12287,10 @@ export namespace Prisma {
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sentTransactions?: TransactionUncheckedUpdateManyWithoutFromUserNestedInput
-    receivedTransactions?: TransactionUncheckedUpdateManyWithoutToUserNestedInput
-    Note?: NoteUncheckedUpdateManyWithoutAuthorNestedInput
+    sentTransaction?: TransactionUncheckedUpdateManyWithoutFromUserNestedInput
+    receivedTransaction?: TransactionUncheckedUpdateManyWithoutToUserNestedInput
+    minerTransaction?: TransactionUncheckedUpdateManyWithoutMinerUserNestedInput
+    NoteAuthor?: NoteUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -12250,11 +12337,12 @@ export namespace Prisma {
     id?: string
     amount: number
     fee: number
-    status?: string
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    fromUser?: UserCreateNestedOneWithoutSentTransactionsInput
-    toUser?: UserCreateNestedOneWithoutReceivedTransactionsInput
+    fromUser?: UserCreateNestedOneWithoutSentTransactionInput
+    toUser?: UserCreateNestedOneWithoutReceivedTransactionInput
+    minerUser?: UserCreateNestedOneWithoutMinerTransactionInput
   }
 
   export type TransactionUncheckedCreateInput = {
@@ -12263,7 +12351,8 @@ export namespace Prisma {
     toAddress: string
     amount: number
     fee: number
-    status?: string
+    minerJid?: string
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12271,11 +12360,12 @@ export namespace Prisma {
   export type TransactionUpdateInput = {
     amount?: FloatFieldUpdateOperationsInput | number
     fee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    fromUser?: UserUpdateOneWithoutSentTransactionsNestedInput
-    toUser?: UserUpdateOneWithoutReceivedTransactionsNestedInput
+    fromUser?: UserUpdateOneWithoutSentTransactionNestedInput
+    toUser?: UserUpdateOneWithoutReceivedTransactionNestedInput
+    minerUser?: UserUpdateOneWithoutMinerTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateInput = {
@@ -12283,7 +12373,8 @@ export namespace Prisma {
     toAddress?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     fee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    minerJid?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12294,7 +12385,8 @@ export namespace Prisma {
     toAddress: string
     amount: number
     fee: number
-    status?: string
+    minerJid?: string
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12302,7 +12394,7 @@ export namespace Prisma {
   export type TransactionUpdateManyMutationInput = {
     amount?: FloatFieldUpdateOperationsInput | number
     fee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12312,7 +12404,8 @@ export namespace Prisma {
     toAddress?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     fee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    minerJid?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12398,7 +12491,7 @@ export namespace Prisma {
     password?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    author: UserCreateNestedOneWithoutNoteInput
+    author: UserCreateNestedOneWithoutNoteAuthorInput
   }
 
   export type NoteUncheckedCreateInput = {
@@ -12419,7 +12512,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    author?: UserUpdateOneRequiredWithoutNoteNestedInput
+    author?: UserUpdateOneRequiredWithoutNoteAuthorNestedInput
   }
 
   export type NoteUncheckedUpdateInput = {
@@ -12958,7 +13051,8 @@ export namespace Prisma {
     toAddress?: SortOrder
     amount?: SortOrder
     fee?: SortOrder
-    status?: SortOrder
+    minerJid?: SortOrder
+    description?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -12974,7 +13068,8 @@ export namespace Prisma {
     toAddress?: SortOrder
     amount?: SortOrder
     fee?: SortOrder
-    status?: SortOrder
+    minerJid?: SortOrder
+    description?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -12985,7 +13080,8 @@ export namespace Prisma {
     toAddress?: SortOrder
     amount?: SortOrder
     fee?: SortOrder
-    status?: SortOrder
+    minerJid?: SortOrder
+    description?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13148,18 +13244,18 @@ export namespace Prisma {
     deleteMany?: GroupParticipantScalarWhereInput | GroupParticipantScalarWhereInput[]
   }
 
-  export type GroupCreateNestedOneWithoutParticipantsInput = {
-    create?: XOR<GroupCreateWithoutParticipantsInput, GroupUncheckedCreateWithoutParticipantsInput>
-    connectOrCreate?: GroupCreateOrConnectWithoutParticipantsInput
+  export type GroupCreateNestedOneWithoutGroupParticipantInput = {
+    create?: XOR<GroupCreateWithoutGroupParticipantInput, GroupUncheckedCreateWithoutGroupParticipantInput>
+    connectOrCreate?: GroupCreateOrConnectWithoutGroupParticipantInput
     connect?: GroupWhereUniqueInput
   }
 
-  export type GroupUpdateOneRequiredWithoutParticipantsNestedInput = {
-    create?: XOR<GroupCreateWithoutParticipantsInput, GroupUncheckedCreateWithoutParticipantsInput>
-    connectOrCreate?: GroupCreateOrConnectWithoutParticipantsInput
-    upsert?: GroupUpsertWithoutParticipantsInput
+  export type GroupUpdateOneRequiredWithoutGroupParticipantNestedInput = {
+    create?: XOR<GroupCreateWithoutGroupParticipantInput, GroupUncheckedCreateWithoutGroupParticipantInput>
+    connectOrCreate?: GroupCreateOrConnectWithoutGroupParticipantInput
+    upsert?: GroupUpsertWithoutGroupParticipantInput
     connect?: GroupWhereUniqueInput
-    update?: XOR<XOR<GroupUpdateToOneWithWhereWithoutParticipantsInput, GroupUpdateWithoutParticipantsInput>, GroupUncheckedUpdateWithoutParticipantsInput>
+    update?: XOR<XOR<GroupUpdateToOneWithWhereWithoutGroupParticipantInput, GroupUpdateWithoutGroupParticipantInput>, GroupUncheckedUpdateWithoutGroupParticipantInput>
   }
 
   export type TransactionCreateNestedManyWithoutFromUserInput = {
@@ -13173,6 +13269,13 @@ export namespace Prisma {
     create?: XOR<TransactionCreateWithoutToUserInput, TransactionUncheckedCreateWithoutToUserInput> | TransactionCreateWithoutToUserInput[] | TransactionUncheckedCreateWithoutToUserInput[]
     connectOrCreate?: TransactionCreateOrConnectWithoutToUserInput | TransactionCreateOrConnectWithoutToUserInput[]
     createMany?: TransactionCreateManyToUserInputEnvelope
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+  }
+
+  export type TransactionCreateNestedManyWithoutMinerUserInput = {
+    create?: XOR<TransactionCreateWithoutMinerUserInput, TransactionUncheckedCreateWithoutMinerUserInput> | TransactionCreateWithoutMinerUserInput[] | TransactionUncheckedCreateWithoutMinerUserInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutMinerUserInput | TransactionCreateOrConnectWithoutMinerUserInput[]
+    createMany?: TransactionCreateManyMinerUserInputEnvelope
     connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
   }
 
@@ -13194,6 +13297,13 @@ export namespace Prisma {
     create?: XOR<TransactionCreateWithoutToUserInput, TransactionUncheckedCreateWithoutToUserInput> | TransactionCreateWithoutToUserInput[] | TransactionUncheckedCreateWithoutToUserInput[]
     connectOrCreate?: TransactionCreateOrConnectWithoutToUserInput | TransactionCreateOrConnectWithoutToUserInput[]
     createMany?: TransactionCreateManyToUserInputEnvelope
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+  }
+
+  export type TransactionUncheckedCreateNestedManyWithoutMinerUserInput = {
+    create?: XOR<TransactionCreateWithoutMinerUserInput, TransactionUncheckedCreateWithoutMinerUserInput> | TransactionCreateWithoutMinerUserInput[] | TransactionUncheckedCreateWithoutMinerUserInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutMinerUserInput | TransactionCreateOrConnectWithoutMinerUserInput[]
+    createMany?: TransactionCreateManyMinerUserInputEnvelope
     connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
   }
 
@@ -13245,6 +13355,20 @@ export namespace Prisma {
     deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
   }
 
+  export type TransactionUpdateManyWithoutMinerUserNestedInput = {
+    create?: XOR<TransactionCreateWithoutMinerUserInput, TransactionUncheckedCreateWithoutMinerUserInput> | TransactionCreateWithoutMinerUserInput[] | TransactionUncheckedCreateWithoutMinerUserInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutMinerUserInput | TransactionCreateOrConnectWithoutMinerUserInput[]
+    upsert?: TransactionUpsertWithWhereUniqueWithoutMinerUserInput | TransactionUpsertWithWhereUniqueWithoutMinerUserInput[]
+    createMany?: TransactionCreateManyMinerUserInputEnvelope
+    set?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    disconnect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    delete?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    update?: TransactionUpdateWithWhereUniqueWithoutMinerUserInput | TransactionUpdateWithWhereUniqueWithoutMinerUserInput[]
+    updateMany?: TransactionUpdateManyWithWhereWithoutMinerUserInput | TransactionUpdateManyWithWhereWithoutMinerUserInput[]
+    deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+  }
+
   export type NoteUpdateManyWithoutAuthorNestedInput = {
     create?: XOR<NoteCreateWithoutAuthorInput, NoteUncheckedCreateWithoutAuthorInput> | NoteCreateWithoutAuthorInput[] | NoteUncheckedCreateWithoutAuthorInput[]
     connectOrCreate?: NoteCreateOrConnectWithoutAuthorInput | NoteCreateOrConnectWithoutAuthorInput[]
@@ -13287,6 +13411,20 @@ export namespace Prisma {
     deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
   }
 
+  export type TransactionUncheckedUpdateManyWithoutMinerUserNestedInput = {
+    create?: XOR<TransactionCreateWithoutMinerUserInput, TransactionUncheckedCreateWithoutMinerUserInput> | TransactionCreateWithoutMinerUserInput[] | TransactionUncheckedCreateWithoutMinerUserInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutMinerUserInput | TransactionCreateOrConnectWithoutMinerUserInput[]
+    upsert?: TransactionUpsertWithWhereUniqueWithoutMinerUserInput | TransactionUpsertWithWhereUniqueWithoutMinerUserInput[]
+    createMany?: TransactionCreateManyMinerUserInputEnvelope
+    set?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    disconnect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    delete?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    update?: TransactionUpdateWithWhereUniqueWithoutMinerUserInput | TransactionUpdateWithWhereUniqueWithoutMinerUserInput[]
+    updateMany?: TransactionUpdateManyWithWhereWithoutMinerUserInput | TransactionUpdateManyWithWhereWithoutMinerUserInput[]
+    deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+  }
+
   export type NoteUncheckedUpdateManyWithoutAuthorNestedInput = {
     create?: XOR<NoteCreateWithoutAuthorInput, NoteUncheckedCreateWithoutAuthorInput> | NoteCreateWithoutAuthorInput[] | NoteUncheckedCreateWithoutAuthorInput[]
     connectOrCreate?: NoteCreateOrConnectWithoutAuthorInput | NoteCreateOrConnectWithoutAuthorInput[]
@@ -13301,50 +13439,66 @@ export namespace Prisma {
     deleteMany?: NoteScalarWhereInput | NoteScalarWhereInput[]
   }
 
-  export type UserCreateNestedOneWithoutSentTransactionsInput = {
-    create?: XOR<UserCreateWithoutSentTransactionsInput, UserUncheckedCreateWithoutSentTransactionsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutSentTransactionsInput
+  export type UserCreateNestedOneWithoutSentTransactionInput = {
+    create?: XOR<UserCreateWithoutSentTransactionInput, UserUncheckedCreateWithoutSentTransactionInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSentTransactionInput
     connect?: UserWhereUniqueInput
   }
 
-  export type UserCreateNestedOneWithoutReceivedTransactionsInput = {
-    create?: XOR<UserCreateWithoutReceivedTransactionsInput, UserUncheckedCreateWithoutReceivedTransactionsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutReceivedTransactionsInput
+  export type UserCreateNestedOneWithoutReceivedTransactionInput = {
+    create?: XOR<UserCreateWithoutReceivedTransactionInput, UserUncheckedCreateWithoutReceivedTransactionInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReceivedTransactionInput
     connect?: UserWhereUniqueInput
   }
 
-  export type UserUpdateOneWithoutSentTransactionsNestedInput = {
-    create?: XOR<UserCreateWithoutSentTransactionsInput, UserUncheckedCreateWithoutSentTransactionsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutSentTransactionsInput
-    upsert?: UserUpsertWithoutSentTransactionsInput
+  export type UserCreateNestedOneWithoutMinerTransactionInput = {
+    create?: XOR<UserCreateWithoutMinerTransactionInput, UserUncheckedCreateWithoutMinerTransactionInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMinerTransactionInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneWithoutSentTransactionNestedInput = {
+    create?: XOR<UserCreateWithoutSentTransactionInput, UserUncheckedCreateWithoutSentTransactionInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSentTransactionInput
+    upsert?: UserUpsertWithoutSentTransactionInput
     disconnect?: boolean
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSentTransactionsInput, UserUpdateWithoutSentTransactionsInput>, UserUncheckedUpdateWithoutSentTransactionsInput>
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSentTransactionInput, UserUpdateWithoutSentTransactionInput>, UserUncheckedUpdateWithoutSentTransactionInput>
   }
 
-  export type UserUpdateOneWithoutReceivedTransactionsNestedInput = {
-    create?: XOR<UserCreateWithoutReceivedTransactionsInput, UserUncheckedCreateWithoutReceivedTransactionsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutReceivedTransactionsInput
-    upsert?: UserUpsertWithoutReceivedTransactionsInput
+  export type UserUpdateOneWithoutReceivedTransactionNestedInput = {
+    create?: XOR<UserCreateWithoutReceivedTransactionInput, UserUncheckedCreateWithoutReceivedTransactionInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReceivedTransactionInput
+    upsert?: UserUpsertWithoutReceivedTransactionInput
     disconnect?: boolean
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReceivedTransactionsInput, UserUpdateWithoutReceivedTransactionsInput>, UserUncheckedUpdateWithoutReceivedTransactionsInput>
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReceivedTransactionInput, UserUpdateWithoutReceivedTransactionInput>, UserUncheckedUpdateWithoutReceivedTransactionInput>
   }
 
-  export type UserCreateNestedOneWithoutNoteInput = {
-    create?: XOR<UserCreateWithoutNoteInput, UserUncheckedCreateWithoutNoteInput>
-    connectOrCreate?: UserCreateOrConnectWithoutNoteInput
+  export type UserUpdateOneWithoutMinerTransactionNestedInput = {
+    create?: XOR<UserCreateWithoutMinerTransactionInput, UserUncheckedCreateWithoutMinerTransactionInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMinerTransactionInput
+    upsert?: UserUpsertWithoutMinerTransactionInput
+    disconnect?: boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMinerTransactionInput, UserUpdateWithoutMinerTransactionInput>, UserUncheckedUpdateWithoutMinerTransactionInput>
+  }
+
+  export type UserCreateNestedOneWithoutNoteAuthorInput = {
+    create?: XOR<UserCreateWithoutNoteAuthorInput, UserUncheckedCreateWithoutNoteAuthorInput>
+    connectOrCreate?: UserCreateOrConnectWithoutNoteAuthorInput
     connect?: UserWhereUniqueInput
   }
 
-  export type UserUpdateOneRequiredWithoutNoteNestedInput = {
-    create?: XOR<UserCreateWithoutNoteInput, UserUncheckedCreateWithoutNoteInput>
-    connectOrCreate?: UserCreateOrConnectWithoutNoteInput
-    upsert?: UserUpsertWithoutNoteInput
+  export type UserUpdateOneRequiredWithoutNoteAuthorNestedInput = {
+    create?: XOR<UserCreateWithoutNoteAuthorInput, UserUncheckedCreateWithoutNoteAuthorInput>
+    connectOrCreate?: UserCreateOrConnectWithoutNoteAuthorInput
+    upsert?: UserUpsertWithoutNoteAuthorInput
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutNoteInput, UserUpdateWithoutNoteInput>, UserUncheckedUpdateWithoutNoteInput>
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutNoteAuthorInput, UserUpdateWithoutNoteAuthorInput>, UserUncheckedUpdateWithoutNoteAuthorInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -13614,7 +13768,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"GroupParticipant"> | Date | string
   }
 
-  export type GroupCreateWithoutParticipantsInput = {
+  export type GroupCreateWithoutGroupParticipantInput = {
     id?: string
     groupId: string
     subject: string
@@ -13633,7 +13787,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type GroupUncheckedCreateWithoutParticipantsInput = {
+  export type GroupUncheckedCreateWithoutGroupParticipantInput = {
     id?: string
     groupId: string
     subject: string
@@ -13652,23 +13806,23 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type GroupCreateOrConnectWithoutParticipantsInput = {
+  export type GroupCreateOrConnectWithoutGroupParticipantInput = {
     where: GroupWhereUniqueInput
-    create: XOR<GroupCreateWithoutParticipantsInput, GroupUncheckedCreateWithoutParticipantsInput>
+    create: XOR<GroupCreateWithoutGroupParticipantInput, GroupUncheckedCreateWithoutGroupParticipantInput>
   }
 
-  export type GroupUpsertWithoutParticipantsInput = {
-    update: XOR<GroupUpdateWithoutParticipantsInput, GroupUncheckedUpdateWithoutParticipantsInput>
-    create: XOR<GroupCreateWithoutParticipantsInput, GroupUncheckedCreateWithoutParticipantsInput>
+  export type GroupUpsertWithoutGroupParticipantInput = {
+    update: XOR<GroupUpdateWithoutGroupParticipantInput, GroupUncheckedUpdateWithoutGroupParticipantInput>
+    create: XOR<GroupCreateWithoutGroupParticipantInput, GroupUncheckedCreateWithoutGroupParticipantInput>
     where?: GroupWhereInput
   }
 
-  export type GroupUpdateToOneWithWhereWithoutParticipantsInput = {
+  export type GroupUpdateToOneWithWhereWithoutGroupParticipantInput = {
     where?: GroupWhereInput
-    data: XOR<GroupUpdateWithoutParticipantsInput, GroupUncheckedUpdateWithoutParticipantsInput>
+    data: XOR<GroupUpdateWithoutGroupParticipantInput, GroupUncheckedUpdateWithoutGroupParticipantInput>
   }
 
-  export type GroupUpdateWithoutParticipantsInput = {
+  export type GroupUpdateWithoutGroupParticipantInput = {
     groupId?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     visible?: BoolFieldUpdateOperationsInput | boolean
@@ -13686,7 +13840,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GroupUncheckedUpdateWithoutParticipantsInput = {
+  export type GroupUncheckedUpdateWithoutGroupParticipantInput = {
     groupId?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     visible?: BoolFieldUpdateOperationsInput | boolean
@@ -13708,10 +13862,11 @@ export namespace Prisma {
     id?: string
     amount: number
     fee: number
-    status?: string
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    toUser?: UserCreateNestedOneWithoutReceivedTransactionsInput
+    toUser?: UserCreateNestedOneWithoutReceivedTransactionInput
+    minerUser?: UserCreateNestedOneWithoutMinerTransactionInput
   }
 
   export type TransactionUncheckedCreateWithoutFromUserInput = {
@@ -13719,7 +13874,8 @@ export namespace Prisma {
     toAddress: string
     amount: number
     fee: number
-    status?: string
+    minerJid?: string
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13737,10 +13893,11 @@ export namespace Prisma {
     id?: string
     amount: number
     fee: number
-    status?: string
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    fromUser?: UserCreateNestedOneWithoutSentTransactionsInput
+    fromUser?: UserCreateNestedOneWithoutSentTransactionInput
+    minerUser?: UserCreateNestedOneWithoutMinerTransactionInput
   }
 
   export type TransactionUncheckedCreateWithoutToUserInput = {
@@ -13748,7 +13905,8 @@ export namespace Prisma {
     fromAddress: string
     amount: number
     fee: number
-    status?: string
+    minerJid?: string
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13760,6 +13918,37 @@ export namespace Prisma {
 
   export type TransactionCreateManyToUserInputEnvelope = {
     data: TransactionCreateManyToUserInput | TransactionCreateManyToUserInput[]
+  }
+
+  export type TransactionCreateWithoutMinerUserInput = {
+    id?: string
+    amount: number
+    fee: number
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fromUser?: UserCreateNestedOneWithoutSentTransactionInput
+    toUser?: UserCreateNestedOneWithoutReceivedTransactionInput
+  }
+
+  export type TransactionUncheckedCreateWithoutMinerUserInput = {
+    id?: string
+    fromAddress: string
+    toAddress: string
+    amount: number
+    fee: number
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TransactionCreateOrConnectWithoutMinerUserInput = {
+    where: TransactionWhereUniqueInput
+    create: XOR<TransactionCreateWithoutMinerUserInput, TransactionUncheckedCreateWithoutMinerUserInput>
+  }
+
+  export type TransactionCreateManyMinerUserInputEnvelope = {
+    data: TransactionCreateManyMinerUserInput | TransactionCreateManyMinerUserInput[]
   }
 
   export type NoteCreateWithoutAuthorInput = {
@@ -13816,7 +14005,8 @@ export namespace Prisma {
     toAddress?: StringFilter<"Transaction"> | string
     amount?: FloatFilter<"Transaction"> | number
     fee?: FloatFilter<"Transaction"> | number
-    status?: StringFilter<"Transaction"> | string
+    minerJid?: StringFilter<"Transaction"> | string
+    description?: StringNullableFilter<"Transaction"> | string | null
     createdAt?: DateTimeFilter<"Transaction"> | Date | string
     updatedAt?: DateTimeFilter<"Transaction"> | Date | string
   }
@@ -13835,6 +14025,22 @@ export namespace Prisma {
   export type TransactionUpdateManyWithWhereWithoutToUserInput = {
     where: TransactionScalarWhereInput
     data: XOR<TransactionUpdateManyMutationInput, TransactionUncheckedUpdateManyWithoutToUserInput>
+  }
+
+  export type TransactionUpsertWithWhereUniqueWithoutMinerUserInput = {
+    where: TransactionWhereUniqueInput
+    update: XOR<TransactionUpdateWithoutMinerUserInput, TransactionUncheckedUpdateWithoutMinerUserInput>
+    create: XOR<TransactionCreateWithoutMinerUserInput, TransactionUncheckedCreateWithoutMinerUserInput>
+  }
+
+  export type TransactionUpdateWithWhereUniqueWithoutMinerUserInput = {
+    where: TransactionWhereUniqueInput
+    data: XOR<TransactionUpdateWithoutMinerUserInput, TransactionUncheckedUpdateWithoutMinerUserInput>
+  }
+
+  export type TransactionUpdateManyWithWhereWithoutMinerUserInput = {
+    where: TransactionScalarWhereInput
+    data: XOR<TransactionUpdateManyMutationInput, TransactionUncheckedUpdateManyWithoutMinerUserInput>
   }
 
   export type NoteUpsertWithWhereUniqueWithoutAuthorInput = {
@@ -13867,7 +14073,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Note"> | Date | string
   }
 
-  export type UserCreateWithoutSentTransactionsInput = {
+  export type UserCreateWithoutSentTransactionInput = {
     id?: string
     jid: string
     pushName?: string | null
@@ -13879,11 +14085,12 @@ export namespace Prisma {
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    receivedTransactions?: TransactionCreateNestedManyWithoutToUserInput
-    Note?: NoteCreateNestedManyWithoutAuthorInput
+    receivedTransaction?: TransactionCreateNestedManyWithoutToUserInput
+    minerTransaction?: TransactionCreateNestedManyWithoutMinerUserInput
+    NoteAuthor?: NoteCreateNestedManyWithoutAuthorInput
   }
 
-  export type UserUncheckedCreateWithoutSentTransactionsInput = {
+  export type UserUncheckedCreateWithoutSentTransactionInput = {
     id?: string
     jid: string
     pushName?: string | null
@@ -13895,16 +14102,17 @@ export namespace Prisma {
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    receivedTransactions?: TransactionUncheckedCreateNestedManyWithoutToUserInput
-    Note?: NoteUncheckedCreateNestedManyWithoutAuthorInput
+    receivedTransaction?: TransactionUncheckedCreateNestedManyWithoutToUserInput
+    minerTransaction?: TransactionUncheckedCreateNestedManyWithoutMinerUserInput
+    NoteAuthor?: NoteUncheckedCreateNestedManyWithoutAuthorInput
   }
 
-  export type UserCreateOrConnectWithoutSentTransactionsInput = {
+  export type UserCreateOrConnectWithoutSentTransactionInput = {
     where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutSentTransactionsInput, UserUncheckedCreateWithoutSentTransactionsInput>
+    create: XOR<UserCreateWithoutSentTransactionInput, UserUncheckedCreateWithoutSentTransactionInput>
   }
 
-  export type UserCreateWithoutReceivedTransactionsInput = {
+  export type UserCreateWithoutReceivedTransactionInput = {
     id?: string
     jid: string
     pushName?: string | null
@@ -13916,11 +14124,12 @@ export namespace Prisma {
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    sentTransactions?: TransactionCreateNestedManyWithoutFromUserInput
-    Note?: NoteCreateNestedManyWithoutAuthorInput
+    sentTransaction?: TransactionCreateNestedManyWithoutFromUserInput
+    minerTransaction?: TransactionCreateNestedManyWithoutMinerUserInput
+    NoteAuthor?: NoteCreateNestedManyWithoutAuthorInput
   }
 
-  export type UserUncheckedCreateWithoutReceivedTransactionsInput = {
+  export type UserUncheckedCreateWithoutReceivedTransactionInput = {
     id?: string
     jid: string
     pushName?: string | null
@@ -13932,98 +14141,17 @@ export namespace Prisma {
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    sentTransactions?: TransactionUncheckedCreateNestedManyWithoutFromUserInput
-    Note?: NoteUncheckedCreateNestedManyWithoutAuthorInput
+    sentTransaction?: TransactionUncheckedCreateNestedManyWithoutFromUserInput
+    minerTransaction?: TransactionUncheckedCreateNestedManyWithoutMinerUserInput
+    NoteAuthor?: NoteUncheckedCreateNestedManyWithoutAuthorInput
   }
 
-  export type UserCreateOrConnectWithoutReceivedTransactionsInput = {
+  export type UserCreateOrConnectWithoutReceivedTransactionInput = {
     where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutReceivedTransactionsInput, UserUncheckedCreateWithoutReceivedTransactionsInput>
+    create: XOR<UserCreateWithoutReceivedTransactionInput, UserUncheckedCreateWithoutReceivedTransactionInput>
   }
 
-  export type UserUpsertWithoutSentTransactionsInput = {
-    update: XOR<UserUpdateWithoutSentTransactionsInput, UserUncheckedUpdateWithoutSentTransactionsInput>
-    create: XOR<UserCreateWithoutSentTransactionsInput, UserUncheckedCreateWithoutSentTransactionsInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutSentTransactionsInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutSentTransactionsInput, UserUncheckedUpdateWithoutSentTransactionsInput>
-  }
-
-  export type UserUpdateWithoutSentTransactionsInput = {
-    jid?: StringFieldUpdateOperationsInput | string
-    pushName?: NullableStringFieldUpdateOperationsInput | string | null
-    exp?: IntFieldUpdateOperationsInput | number
-    subscription?: InputJsonValue | InputJsonValue
-    banStatus?: InputJsonValue | InputJsonValue
-    token?: StringFieldUpdateOperationsInput | string
-    lang?: StringFieldUpdateOperationsInput | string
-    balance?: FloatFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    receivedTransactions?: TransactionUpdateManyWithoutToUserNestedInput
-    Note?: NoteUpdateManyWithoutAuthorNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutSentTransactionsInput = {
-    jid?: StringFieldUpdateOperationsInput | string
-    pushName?: NullableStringFieldUpdateOperationsInput | string | null
-    exp?: IntFieldUpdateOperationsInput | number
-    subscription?: InputJsonValue | InputJsonValue
-    banStatus?: InputJsonValue | InputJsonValue
-    token?: StringFieldUpdateOperationsInput | string
-    lang?: StringFieldUpdateOperationsInput | string
-    balance?: FloatFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    receivedTransactions?: TransactionUncheckedUpdateManyWithoutToUserNestedInput
-    Note?: NoteUncheckedUpdateManyWithoutAuthorNestedInput
-  }
-
-  export type UserUpsertWithoutReceivedTransactionsInput = {
-    update: XOR<UserUpdateWithoutReceivedTransactionsInput, UserUncheckedUpdateWithoutReceivedTransactionsInput>
-    create: XOR<UserCreateWithoutReceivedTransactionsInput, UserUncheckedCreateWithoutReceivedTransactionsInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutReceivedTransactionsInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutReceivedTransactionsInput, UserUncheckedUpdateWithoutReceivedTransactionsInput>
-  }
-
-  export type UserUpdateWithoutReceivedTransactionsInput = {
-    jid?: StringFieldUpdateOperationsInput | string
-    pushName?: NullableStringFieldUpdateOperationsInput | string | null
-    exp?: IntFieldUpdateOperationsInput | number
-    subscription?: InputJsonValue | InputJsonValue
-    banStatus?: InputJsonValue | InputJsonValue
-    token?: StringFieldUpdateOperationsInput | string
-    lang?: StringFieldUpdateOperationsInput | string
-    balance?: FloatFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sentTransactions?: TransactionUpdateManyWithoutFromUserNestedInput
-    Note?: NoteUpdateManyWithoutAuthorNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutReceivedTransactionsInput = {
-    jid?: StringFieldUpdateOperationsInput | string
-    pushName?: NullableStringFieldUpdateOperationsInput | string | null
-    exp?: IntFieldUpdateOperationsInput | number
-    subscription?: InputJsonValue | InputJsonValue
-    banStatus?: InputJsonValue | InputJsonValue
-    token?: StringFieldUpdateOperationsInput | string
-    lang?: StringFieldUpdateOperationsInput | string
-    balance?: FloatFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sentTransactions?: TransactionUncheckedUpdateManyWithoutFromUserNestedInput
-    Note?: NoteUncheckedUpdateManyWithoutAuthorNestedInput
-  }
-
-  export type UserCreateWithoutNoteInput = {
+  export type UserCreateWithoutMinerTransactionInput = {
     id?: string
     jid: string
     pushName?: string | null
@@ -14035,11 +14163,12 @@ export namespace Prisma {
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    sentTransactions?: TransactionCreateNestedManyWithoutFromUserInput
-    receivedTransactions?: TransactionCreateNestedManyWithoutToUserInput
+    sentTransaction?: TransactionCreateNestedManyWithoutFromUserInput
+    receivedTransaction?: TransactionCreateNestedManyWithoutToUserInput
+    NoteAuthor?: NoteCreateNestedManyWithoutAuthorInput
   }
 
-  export type UserUncheckedCreateWithoutNoteInput = {
+  export type UserUncheckedCreateWithoutMinerTransactionInput = {
     id?: string
     jid: string
     pushName?: string | null
@@ -14051,27 +14180,28 @@ export namespace Prisma {
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    sentTransactions?: TransactionUncheckedCreateNestedManyWithoutFromUserInput
-    receivedTransactions?: TransactionUncheckedCreateNestedManyWithoutToUserInput
+    sentTransaction?: TransactionUncheckedCreateNestedManyWithoutFromUserInput
+    receivedTransaction?: TransactionUncheckedCreateNestedManyWithoutToUserInput
+    NoteAuthor?: NoteUncheckedCreateNestedManyWithoutAuthorInput
   }
 
-  export type UserCreateOrConnectWithoutNoteInput = {
+  export type UserCreateOrConnectWithoutMinerTransactionInput = {
     where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutNoteInput, UserUncheckedCreateWithoutNoteInput>
+    create: XOR<UserCreateWithoutMinerTransactionInput, UserUncheckedCreateWithoutMinerTransactionInput>
   }
 
-  export type UserUpsertWithoutNoteInput = {
-    update: XOR<UserUpdateWithoutNoteInput, UserUncheckedUpdateWithoutNoteInput>
-    create: XOR<UserCreateWithoutNoteInput, UserUncheckedCreateWithoutNoteInput>
+  export type UserUpsertWithoutSentTransactionInput = {
+    update: XOR<UserUpdateWithoutSentTransactionInput, UserUncheckedUpdateWithoutSentTransactionInput>
+    create: XOR<UserCreateWithoutSentTransactionInput, UserUncheckedCreateWithoutSentTransactionInput>
     where?: UserWhereInput
   }
 
-  export type UserUpdateToOneWithWhereWithoutNoteInput = {
+  export type UserUpdateToOneWithWhereWithoutSentTransactionInput = {
     where?: UserWhereInput
-    data: XOR<UserUpdateWithoutNoteInput, UserUncheckedUpdateWithoutNoteInput>
+    data: XOR<UserUpdateWithoutSentTransactionInput, UserUncheckedUpdateWithoutSentTransactionInput>
   }
 
-  export type UserUpdateWithoutNoteInput = {
+  export type UserUpdateWithoutSentTransactionInput = {
     jid?: StringFieldUpdateOperationsInput | string
     pushName?: NullableStringFieldUpdateOperationsInput | string | null
     exp?: IntFieldUpdateOperationsInput | number
@@ -14082,11 +14212,12 @@ export namespace Prisma {
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sentTransactions?: TransactionUpdateManyWithoutFromUserNestedInput
-    receivedTransactions?: TransactionUpdateManyWithoutToUserNestedInput
+    receivedTransaction?: TransactionUpdateManyWithoutToUserNestedInput
+    minerTransaction?: TransactionUpdateManyWithoutMinerUserNestedInput
+    NoteAuthor?: NoteUpdateManyWithoutAuthorNestedInput
   }
 
-  export type UserUncheckedUpdateWithoutNoteInput = {
+  export type UserUncheckedUpdateWithoutSentTransactionInput = {
     jid?: StringFieldUpdateOperationsInput | string
     pushName?: NullableStringFieldUpdateOperationsInput | string | null
     exp?: IntFieldUpdateOperationsInput | number
@@ -14097,8 +14228,177 @@ export namespace Prisma {
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sentTransactions?: TransactionUncheckedUpdateManyWithoutFromUserNestedInput
-    receivedTransactions?: TransactionUncheckedUpdateManyWithoutToUserNestedInput
+    receivedTransaction?: TransactionUncheckedUpdateManyWithoutToUserNestedInput
+    minerTransaction?: TransactionUncheckedUpdateManyWithoutMinerUserNestedInput
+    NoteAuthor?: NoteUncheckedUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUpsertWithoutReceivedTransactionInput = {
+    update: XOR<UserUpdateWithoutReceivedTransactionInput, UserUncheckedUpdateWithoutReceivedTransactionInput>
+    create: XOR<UserCreateWithoutReceivedTransactionInput, UserUncheckedCreateWithoutReceivedTransactionInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReceivedTransactionInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReceivedTransactionInput, UserUncheckedUpdateWithoutReceivedTransactionInput>
+  }
+
+  export type UserUpdateWithoutReceivedTransactionInput = {
+    jid?: StringFieldUpdateOperationsInput | string
+    pushName?: NullableStringFieldUpdateOperationsInput | string | null
+    exp?: IntFieldUpdateOperationsInput | number
+    subscription?: InputJsonValue | InputJsonValue
+    banStatus?: InputJsonValue | InputJsonValue
+    token?: StringFieldUpdateOperationsInput | string
+    lang?: StringFieldUpdateOperationsInput | string
+    balance?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sentTransaction?: TransactionUpdateManyWithoutFromUserNestedInput
+    minerTransaction?: TransactionUpdateManyWithoutMinerUserNestedInput
+    NoteAuthor?: NoteUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReceivedTransactionInput = {
+    jid?: StringFieldUpdateOperationsInput | string
+    pushName?: NullableStringFieldUpdateOperationsInput | string | null
+    exp?: IntFieldUpdateOperationsInput | number
+    subscription?: InputJsonValue | InputJsonValue
+    banStatus?: InputJsonValue | InputJsonValue
+    token?: StringFieldUpdateOperationsInput | string
+    lang?: StringFieldUpdateOperationsInput | string
+    balance?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sentTransaction?: TransactionUncheckedUpdateManyWithoutFromUserNestedInput
+    minerTransaction?: TransactionUncheckedUpdateManyWithoutMinerUserNestedInput
+    NoteAuthor?: NoteUncheckedUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUpsertWithoutMinerTransactionInput = {
+    update: XOR<UserUpdateWithoutMinerTransactionInput, UserUncheckedUpdateWithoutMinerTransactionInput>
+    create: XOR<UserCreateWithoutMinerTransactionInput, UserUncheckedCreateWithoutMinerTransactionInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutMinerTransactionInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutMinerTransactionInput, UserUncheckedUpdateWithoutMinerTransactionInput>
+  }
+
+  export type UserUpdateWithoutMinerTransactionInput = {
+    jid?: StringFieldUpdateOperationsInput | string
+    pushName?: NullableStringFieldUpdateOperationsInput | string | null
+    exp?: IntFieldUpdateOperationsInput | number
+    subscription?: InputJsonValue | InputJsonValue
+    banStatus?: InputJsonValue | InputJsonValue
+    token?: StringFieldUpdateOperationsInput | string
+    lang?: StringFieldUpdateOperationsInput | string
+    balance?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sentTransaction?: TransactionUpdateManyWithoutFromUserNestedInput
+    receivedTransaction?: TransactionUpdateManyWithoutToUserNestedInput
+    NoteAuthor?: NoteUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutMinerTransactionInput = {
+    jid?: StringFieldUpdateOperationsInput | string
+    pushName?: NullableStringFieldUpdateOperationsInput | string | null
+    exp?: IntFieldUpdateOperationsInput | number
+    subscription?: InputJsonValue | InputJsonValue
+    banStatus?: InputJsonValue | InputJsonValue
+    token?: StringFieldUpdateOperationsInput | string
+    lang?: StringFieldUpdateOperationsInput | string
+    balance?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sentTransaction?: TransactionUncheckedUpdateManyWithoutFromUserNestedInput
+    receivedTransaction?: TransactionUncheckedUpdateManyWithoutToUserNestedInput
+    NoteAuthor?: NoteUncheckedUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserCreateWithoutNoteAuthorInput = {
+    id?: string
+    jid: string
+    pushName?: string | null
+    exp?: number
+    subscription?: InputJsonValue
+    banStatus?: InputJsonValue
+    token?: string
+    lang?: string
+    balance?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sentTransaction?: TransactionCreateNestedManyWithoutFromUserInput
+    receivedTransaction?: TransactionCreateNestedManyWithoutToUserInput
+    minerTransaction?: TransactionCreateNestedManyWithoutMinerUserInput
+  }
+
+  export type UserUncheckedCreateWithoutNoteAuthorInput = {
+    id?: string
+    jid: string
+    pushName?: string | null
+    exp?: number
+    subscription?: InputJsonValue
+    banStatus?: InputJsonValue
+    token?: string
+    lang?: string
+    balance?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sentTransaction?: TransactionUncheckedCreateNestedManyWithoutFromUserInput
+    receivedTransaction?: TransactionUncheckedCreateNestedManyWithoutToUserInput
+    minerTransaction?: TransactionUncheckedCreateNestedManyWithoutMinerUserInput
+  }
+
+  export type UserCreateOrConnectWithoutNoteAuthorInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutNoteAuthorInput, UserUncheckedCreateWithoutNoteAuthorInput>
+  }
+
+  export type UserUpsertWithoutNoteAuthorInput = {
+    update: XOR<UserUpdateWithoutNoteAuthorInput, UserUncheckedUpdateWithoutNoteAuthorInput>
+    create: XOR<UserCreateWithoutNoteAuthorInput, UserUncheckedCreateWithoutNoteAuthorInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutNoteAuthorInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutNoteAuthorInput, UserUncheckedUpdateWithoutNoteAuthorInput>
+  }
+
+  export type UserUpdateWithoutNoteAuthorInput = {
+    jid?: StringFieldUpdateOperationsInput | string
+    pushName?: NullableStringFieldUpdateOperationsInput | string | null
+    exp?: IntFieldUpdateOperationsInput | number
+    subscription?: InputJsonValue | InputJsonValue
+    banStatus?: InputJsonValue | InputJsonValue
+    token?: StringFieldUpdateOperationsInput | string
+    lang?: StringFieldUpdateOperationsInput | string
+    balance?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sentTransaction?: TransactionUpdateManyWithoutFromUserNestedInput
+    receivedTransaction?: TransactionUpdateManyWithoutToUserNestedInput
+    minerTransaction?: TransactionUpdateManyWithoutMinerUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutNoteAuthorInput = {
+    jid?: StringFieldUpdateOperationsInput | string
+    pushName?: NullableStringFieldUpdateOperationsInput | string | null
+    exp?: IntFieldUpdateOperationsInput | number
+    subscription?: InputJsonValue | InputJsonValue
+    banStatus?: InputJsonValue | InputJsonValue
+    token?: StringFieldUpdateOperationsInput | string
+    lang?: StringFieldUpdateOperationsInput | string
+    balance?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sentTransaction?: TransactionUncheckedUpdateManyWithoutFromUserNestedInput
+    receivedTransaction?: TransactionUncheckedUpdateManyWithoutToUserNestedInput
+    minerTransaction?: TransactionUncheckedUpdateManyWithoutMinerUserNestedInput
   }
 
   export type GroupParticipantCreateManyGroupInput = {
@@ -14143,7 +14443,8 @@ export namespace Prisma {
     toAddress: string
     amount: number
     fee: number
-    status?: string
+    minerJid?: string
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14153,7 +14454,19 @@ export namespace Prisma {
     fromAddress: string
     amount: number
     fee: number
-    status?: string
+    minerJid?: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TransactionCreateManyMinerUserInput = {
+    id?: string
+    fromAddress: string
+    toAddress: string
+    amount: number
+    fee: number
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14171,17 +14484,19 @@ export namespace Prisma {
   export type TransactionUpdateWithoutFromUserInput = {
     amount?: FloatFieldUpdateOperationsInput | number
     fee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    toUser?: UserUpdateOneWithoutReceivedTransactionsNestedInput
+    toUser?: UserUpdateOneWithoutReceivedTransactionNestedInput
+    minerUser?: UserUpdateOneWithoutMinerTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutFromUserInput = {
     toAddress?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     fee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    minerJid?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14190,7 +14505,8 @@ export namespace Prisma {
     toAddress?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     fee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    minerJid?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14198,17 +14514,19 @@ export namespace Prisma {
   export type TransactionUpdateWithoutToUserInput = {
     amount?: FloatFieldUpdateOperationsInput | number
     fee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    fromUser?: UserUpdateOneWithoutSentTransactionsNestedInput
+    fromUser?: UserUpdateOneWithoutSentTransactionNestedInput
+    minerUser?: UserUpdateOneWithoutMinerTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutToUserInput = {
     fromAddress?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     fee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    minerJid?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14217,7 +14535,38 @@ export namespace Prisma {
     fromAddress?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     fee?: FloatFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
+    minerJid?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionUpdateWithoutMinerUserInput = {
+    amount?: FloatFieldUpdateOperationsInput | number
+    fee?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fromUser?: UserUpdateOneWithoutSentTransactionNestedInput
+    toUser?: UserUpdateOneWithoutReceivedTransactionNestedInput
+  }
+
+  export type TransactionUncheckedUpdateWithoutMinerUserInput = {
+    fromAddress?: StringFieldUpdateOperationsInput | string
+    toAddress?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    fee?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionUncheckedUpdateManyWithoutMinerUserInput = {
+    fromAddress?: StringFieldUpdateOperationsInput | string
+    toAddress?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    fee?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

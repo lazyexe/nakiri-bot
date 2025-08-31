@@ -13,9 +13,9 @@ Command({
 
     const [ amount, to ] = m.content.textWithoutCommand.split(' ');
 
-    if (m.content.mentionedJid.length) toJid = m.content.mentionedJid[0];
+    if (to) toJid = to.replace(/[^0-9]/g, '');
     if (m.quoted) toJid = m.quoted.sender;
-    if (to) toJid = to;
+    if (m.content.mentionedJid.length) toJid = m.content.mentionedJid[0];
 
     if (!toJid) return m.reply(__('cmd.personal.transfer.ex', { command: m.content.command }));
 
@@ -25,14 +25,9 @@ Command({
 
     try {
       const transaction = await currencyInstance.transfer({ fromJid: m.sender, toJid, amount: Number(amount) });
-      currencyInstance.messageHistoryMap.set(transaction.id, {
-        key: m.key,
-        message: m.message,
-        content: m.content,
-      });
-      if (currencyInstance.minerMap.size == 0) return m.reply(__('cmd.personal.transfer.pending'));
+
+      m.reply(__('cmd.personal.transfer.success', { amount: transaction.amount, pushName: transaction.users.to.pushName }));
     } catch (e) {
-      console.log(e.message);
       return m.reply(e.message);
     }
   }

@@ -14,7 +14,7 @@ require('./app/utils/i18n.js');
 const { initPrisma, disconnectPrisma } = require('./app/utils/prisma.js');
 initPrisma();
 
-// init coin
+// init currency
 const currencyInstance = require('./app/utils/currency.js');
 currencyInstance.init();
 

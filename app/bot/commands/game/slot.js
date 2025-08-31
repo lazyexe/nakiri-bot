@@ -1,103 +1,152 @@
 const { Command } = require('../../../utils/command.js');
+const currencyInstance = require('../../../utils/currency.js');
 const { delay } = require('baileys');
 const crypto = require('crypto');
 
-// ====== KONFIGURASI PROBABILITAS & BAYARAN ======
 const PROB = {
-  jackpot: 0.05,   // 5%   -> 3 simbol sama
-  twomatch: 0.20,  // 20%  -> 2 simbol sama
-  none: 0.75       // 75%  -> tidak ada yang sama 2/3
+  jackpot: 0.05,
+  twomatch: 0.20,
+  none: 0.75
 };
-// (opsional) payout jika pakai taruhan: faktor pengali dari bet
 const PAYOUT = { jackpot: 10, twomatch: 2, none: 0 };
+const symbols = ['🍒', '🍋', '🍉', '🍇', '⭐', '💎', '7️⃣'];
 
-// Helper RNG pakai crypto biar adil
 function rng01() {
-  // integer 0..1e9-1 lalu dibagi 1e9
   return crypto.randomInt(0, 1_000_000_000) / 1_000_000_000;
 }
 
 function decideOutcome() {
   const r = rng01();
   const pJack = PROB.jackpot;
-  const pTwo  = PROB.twomatch;
+  const pTwo = PROB.twomatch;
   if (r < pJack) return 'jackpot';
   if (r < pJack + pTwo) return 'twomatch';
   return 'none';
 }
 
-const symbols = ['🍒', '🍋', '🍉', '🍇', '⭐', '💎', '7️⃣'];
-
-// Bangun 3 simbol final berdasarkan outcome
 function buildFinalSpin(outcome) {
   if (outcome === 'jackpot') {
     const s = symbols[crypto.randomInt(0, symbols.length)];
     return [s, s, s];
   }
+  
   if (outcome === 'twomatch') {
-    const a = symbols[crypto.randomInt(0, symbols.length)];
-    // pastikan b != a
-    let b;
-    do { b = symbols[crypto.randomInt(0, symbols.length)]; } while (b === a);
-    // acak posisi mana yang beda
-    const posDiff = crypto.randomInt(0, 3); // 0,1,2
-    const arr = [a, a, a];
-    arr[posDiff] = b;
-    return arr;
+    const s1 = symbols[crypto.randomInt(0, symbols.length)];
+    let s2;
+    do { 
+      s2 = symbols[crypto.randomInt(0, symbols.length)]; 
+    } while (s1 === s2);
+
+    const positions = [0, 1, 2];
+    const diffPos = positions.splice(crypto.randomInt(0, positions.length), 1)[0];
+
+    const result = [s1, s1, s1];
+    result[diffPos] = s2;
+    return result;
   }
-  // outcome: none -> pastikan ketiganya berbeda
-  let a = symbols[crypto.randomInt(0, symbols.length)];
-  let b, c;
-  do { b = symbols[crypto.randomInt(0, symbols.length)]; } while (b === a);
-  do {
-    c = symbols[crypto.randomInt(0, symbols.length)];
-  } while (c === a || c === b);
-  // acak urutan
-  const arr = [a,b,c];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = crypto.randomInt(0, i+1);
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
+
+  const s1 = symbols[crypto.randomInt(0, symbols.length)];
+  let s2, s3;
+
+  do { s2 = symbols[crypto.randomInt(0, symbols.length)]; } while (s1 === s2);
+  do { s3 = symbols[crypto.randomInt(0, symbols.length)]; } while (s3 === s1 || s3 === s2);
+
+  const arr = [s1, s2, s3];
+  arr.sort(() => crypto.randomInt(-10, 10));
   return arr;
 }
 
-// Untuk efek “berputar” saat edit pesan
 function randomSpin() {
-  return [
-    symbols[crypto.randomInt(0, symbols.length)],
-    symbols[crypto.randomInt(0, symbols.length)],
-    symbols[crypto.randomInt(0, symbols.length)],
-  ];
+  const arr = symbols.slice();
+  arr.sort(() => crypto.randomInt(-10, 10));
+  return arr.slice(0, 3);
 }
 
 Command({
   name: 'game-slot',
   description: 'Main slot dengan probabilitas terkontrol',
   alias: ['slot', 'jackpot'],
-  run: async ({ sock, m /*, dbUser, bet */ }) => {
-    // (opsional) ambil bet dari argumen & validasi saldo user
-    const outcome = decideOutcome();
-    const finalSpin = buildFinalSpin(outcome);
+  run: async ({ sock, m }) => {
+    const baseBet = 50;
+    const maxBet = 250;
+    const bet = parseInt(m.content.textWithoutCommand.trim());
 
-    // Kirim pesan awal
-    let msg = await sock.sendMessage(m.chat, { text: `🎰 | ${randomSpin().join(' ')} |` }, { quoted: m });
-
-    // Edit beberapa kali untuk animasi
-    for (let i = 0; i < 6; i++) {
-      await delay(450);
-      await sock.sendMessage(m.chat, { text: `🎰 | ${randomSpin().join(' ')} |`, edit: msg.key });
+    if (isNaN(bet) || bet < baseBet || bet % baseBet !== 0) {
+      await m.sendMessage(m.chat, {
+        text: `Masukkan jumlah taruhan kelipatan ${baseBet}.\nContoh: ${m.content.command} 150`
+      }, { quoted: m });
+      return;
     }
 
-    // (opsional) hitung payout kalau pakai taruhan
-    const bet = 100; // contoh
-    const winAmount = Math.floor(bet * PAYOUT[outcome]);
+    if (bet > maxBet) {
+      await m.sendMessage(m.chat, {
+        text: `Maksimum taruhan adalah ${maxBet}.`
+      }, { quoted: m });
+      return;
+    }
 
-    await delay(650);
-    const label = outcome === 'jackpot' ? '🎉 JACKPOT!!!' : outcome === 'twomatch' ? '✨ Lumayan!' : '😢 Coba lagi!';
+    try {
+      await currencyInstance.transfer({ fromJid: m.senderJid, toJid: '0@s.whatsapp.net', amount: bet });
+    } catch (e) {
+      return await m.reply(e.message);
+    }
 
-    await sock.sendMessage(m.chat, {
-      text: `🎰 | ${finalSpin.join(' ')} |\n\n${label}` + `\nHasil: ${outcome} | Payout: ${winAmount}`,
-      edit: msg.key
+    const numSpins = bet / baseBet;
+    let totalWin = 0;
+    let allResults = [];
+
+    let msg = await sock.sendMessage(m.chat, {
+      text: `✅ Memulai ${numSpins} putaran...\n\nSpin 1/${numSpins} | ${randomSpin().join(' ')} |`
+    }, { quoted: m });
+
+    for (let i = 0; i < numSpins; i++) {
+      for (let j = 0; j < 6; j++) {
+        await delay(450);
+        await sock.sendMessage(m.chat, {
+          text: `✅ Memulai ${numSpins} putaran...\n\nSpin ${i + 1}/${numSpins} | ${randomSpin().join(' ')} |` ,
+          edit: msg.key
+        });
+      }
+      await delay(650);
+
+      const outcome = decideOutcome();
+      const finalSpin = buildFinalSpin(outcome);
+      const winAmount = Math.floor(baseBet * PAYOUT[outcome]);
+      totalWin += winAmount;
+
+      let label = '';
+      if (outcome === 'jackpot') {
+        label = '🎉 JACKPOT!';
+      } else if (outcome === 'twomatch') {
+        label = '✨ Lumayan!';
+      } else {
+        label = '😢 Kalah.';
+      }
+
+      allResults.push({
+        spin: i + 1,
+        result: finalSpin,
+        win: winAmount,
+        outcomeLabel: label
+      });
+
+      await delay(1000);
+
+      await sock.sendMessage(m.chat, {
+        text: `✅ Memulai ${numSpins} putaran...\n\nSpin ${i + 1}/${numSpins} | ${finalSpin.join(' ')} |\n${label}` ,
+        edit: msg.key
+      });
+    }
+
+    await delay(1500);
+
+    let summaryText = `*Hasil Akhir (${numSpins} Putaran)*\n`;
+    allResults.forEach(res => {
+      summaryText += `\n🎰 Spin ${res.spin}: ${res.result.join(' ')}\n> ${res.outcomeLabel} Menang ${res.win}!\n`;
     });
+
+    summaryText += `\n*Total Taruhan:* ${bet}\n*Total Kemenangan:* ${totalWin}\n*Keuntungan/Kerugian:* ${totalWin - bet}`;
+
+    await sock.sendMessage(m.chat, { text: summaryText, edit: msg.key });
   }
 });

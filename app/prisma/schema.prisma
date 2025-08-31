@@ -38,7 +38,7 @@ enum accessFeatures {
 
 model Group {
   id               String         @id @default(auto()) @map("_id") @db.ObjectId
-  groupId          String
+  groupId          String         @unique
   subject          String
   visible          Boolean        @default(false)
   link             String         @default("")
@@ -54,9 +54,8 @@ model Group {
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
 
-  participants GroupParticipant[]
+  GroupParticipant GroupParticipant[] @relation("participant")
 
-  @@unique([groupId])
   @@map("groups")
 }
 
@@ -70,7 +69,7 @@ model GroupParticipant {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  group Group @relation(fields: [groupId], references: [groupId])
+  group Group @relation("participant", fields: [groupId], references: [groupId])
 
   @@unique([groupId, jid])
   @@map("group_participants")
@@ -90,7 +89,7 @@ model GroupTag {
 
 model User {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  jid          String
+  jid          String   @unique
   pushName     String?  @default("")
   exp          Int      @default(0)
   subscription Json     @default("{}")
@@ -101,24 +100,26 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  sentTransactions     Transaction[] @relation("SentTransactions")
-  receivedTransactions Transaction[] @relation("ReceivedTransactions")
-  Note                 Note[]
+  sentTransaction     Transaction[] @relation("SentTransaction")
+  receivedTransaction Transaction[] @relation("ReceivedTransaction")
+  minerTransaction    Transaction[] @relation("MinerTransaction")
+  NoteAuthor          Note[]        @relation("NoteAuthor")
 
-  @@unique([jid])
   @@map("users")
 }
 
 model Transaction {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
   fromAddress String
   toAddress   String
   amount      Float
   fee         Float
-  status      String @default("pending") // pending, confirmed, failed
+  minerJid    String  @default("")
+  description String?
 
-  fromUser User? @relation("SentTransactions", fields: [fromAddress], references: [jid])
-  toUser   User? @relation("ReceivedTransactions", fields: [toAddress], references: [jid])
+  fromUser  User? @relation("SentTransaction", fields: [fromAddress], references: [jid])
+  toUser    User? @relation("ReceivedTransaction", fields: [toAddress], references: [jid])
+  minerUser User? @relation("MinerTransaction", fields: [minerJid], references: [jid])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -147,7 +148,7 @@ model Note {
   authorJid String
   password  String?
 
-  author User @relation(fields: [authorJid], references: [jid])
+  author User @relation("NoteAuthor", fields: [authorJid], references: [jid])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

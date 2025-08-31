@@ -186,7 +186,8 @@ exports.Prisma.TransactionScalarFieldEnum = {
   toAddress: 'toAddress',
   amount: 'amount',
   fee: 'fee',
-  status: 'status',
+  minerJid: 'minerJid',
+  description: 'description',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

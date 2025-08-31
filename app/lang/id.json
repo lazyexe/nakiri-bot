@@ -95,7 +95,7 @@
                 "ex": "Contoh:\n{command} <jumlah> @tag\n{command} <jumlah> <number>\nbalas pesan seseorang lalu ketik {command} <jumlah>",
                 "amountMinTransfer": "Jumlah tidak boleh 0 atau kurang.",
                 "pending": "Transfer sedang diproses.",
-                "success": "Berhasil terkirim."
+                "success": "Berhasil mengirimkan uang sebesar {amount} ke {pushName}."
             }
         },
 

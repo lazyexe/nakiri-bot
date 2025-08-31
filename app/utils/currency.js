@@ -1,4 +1,5 @@
 const { prisma } = require('./prisma.js');
+const { USER_DEFAULT } = require('./schemaData.js');
 const luxon = require('luxon');
 const { isJidUser } = require('baileys');
 const { consola } = require('consola');
@@ -12,7 +13,7 @@ class Currency {
     this.isProcessing = false;
     this.timeoutMiner = null;
     this.lastMinerIndex = 0;
-    this.MINING_TIMEOUT_MINUTES = 10;
+    this.MINING_TIMEOUT_MINUTES = 0.1;
     this.PRECISION_MULTIPLIER = 100000000;
     this.MIN_REWARD = 0.00000001;
     this.ev = new EventEmitter();
@@ -34,6 +35,15 @@ class Currency {
             initialReward: 100,
             halvingInterval: 500000,
             transferFee: 0.01,
+          },
+        });
+
+        // init user bank account
+        await prisma.user.create({
+          data: {
+            ...USER_DEFAULT,
+            jid: '0@s.whatsapp.net',
+            pushName: 'System',
           },
         });
       }
@@ -109,8 +119,8 @@ class Currency {
             fromAddress: fromUser.jid,
             toAddress: toUser.jid,
             amount: this.roundAmount(amount),
+            minerJid: 'none',
             fee,
-            status: 'pending',
           },
         });
 
@@ -118,16 +128,21 @@ class Currency {
         await tx.user.update({
           where: { jid: fromUser.jid },
           data: {
-            balance: this.roundAmount(fromUser.balance - totalDeduct),
+            balance: { decrement: this.roundAmount(totalDeduct) }
           },
         });
 
-        // Trigger mining process asynchronously
-        setImmediate(() => this.minerHandler());
+        await tx.user.update({
+          where: { jid: toUser.jid },
+          data: {
+            balance: { increment: this.roundAmount(transaction.amount) }
+          }
+        });
+
+        await this.minerHandler();
 
         return {
           id: transaction.id,
-          status: transaction.status,
           amount: this.roundAmount(amount),
           fee,
           totalPaid: totalDeduct,
@@ -191,17 +206,25 @@ class Currency {
    * Handle mining process and transaction processing
    */
   async minerHandler() {
-    if (this.minerMap.size === 0) return;
-    
     try {
       const pendingTransaction = await prisma.transaction.findFirst({
-        where: { status: 'pending' },
+        where: { minerJid: 'none' },
       });
-      const miner = this.getNextMiner();
       if (pendingTransaction) {
+        if (this.minerMap.size === 0) {
+          this.lastMinerIndex = 0;
+          this.minerMap.set('0@s.whatsapp.net', {
+            remainingMines: 1,
+            history: [],
+            timestamp: luxon.DateTime.now(),
+          });
+        }
+        let miner = this.getNextMiner();
         await this.handlePendingTransactions(miner);
-        this.isProcessing = false;
       } else if (this.metadata.currentSupply <= this.metadata.maxSupply) {
+        if (this.minerMap.size === 0) return;
+        const miner = this.getNextMiner();
+        if (miner.jid == '0@s.whatsapp.net') return;
         this.scheduleNextMining(miner);
       }
     } catch (error) {
@@ -226,7 +249,7 @@ class Currency {
     try {
       await prisma.$transaction(async (tx) => {
         const pendingTx = await tx.transaction.findMany({
-          where: { status: 'pending' },
+          where: { minerJid: 'none' },
           orderBy: { createdAt: 'asc' }
         });
 
@@ -235,16 +258,9 @@ class Currency {
         let totalFee = 0;
 
         for (const transaction of pendingTx) {
-          await tx.user.update({
-            where: { jid: transaction.toAddress },
-            data: {
-              balance: { increment: this.roundAmount(transaction.amount) }
-            }
-          });
-
           await tx.transaction.update({
             where: { id: transaction.id },
-            data: { status: 'completed' }
+            data: { minerJid: minerMap.jid }
           });
 
           totalFee += transaction.fee;
@@ -253,7 +269,6 @@ class Currency {
             type: 'transaction',
             transaction: {
               id: transaction.id,
-              status: 'completed',
               amount: this.roundAmount(transaction.amount),
               fee: transaction.fee,
               totalPaid: this.roundAmount(transaction.amount + transaction.fee),
@@ -290,10 +305,11 @@ class Currency {
           });
         } catch {}
 
+        // update miner balance
         await tx.user.update({
           where: { jid: minerMap.jid },
           data: {
-            balance: this.roundAmount(minerPrisma.balance + totalReward),
+            balance: { increment: this.roundAmount(totalReward) }
           },
         });
 
@@ -303,20 +319,13 @@ class Currency {
         if (minerMap.remainingMines == 0) {
           this.removeMiner(minerMap.jid);
 
-          this.ev.emit('miner', { 
-            minerMap,
-          });
+          this.ev.emit('miner', minerMap);
         }
 
-        this.ev.emit('transaction', {
-          minerMap,
-          transactions: pendingTx.map((transaction) => ({
-            ...transaction,
-            status: 'completed',
-          }))
-        });
+        this.isProcessing = false;
       });
     } catch (error) {
+      this.isProcessing = false;
       throw error;
     }
   }
@@ -357,13 +366,7 @@ class Currency {
   
         this.minerHandler();
 
-        this.ev.emit('miner', {
-          minerMap,
-          supplyReward: this.roundAmount(reward),
-          totalReward: this.roundAmount(reward),
-          totalFee: 0,
-          transactions: []
-        });
+        this.ev.emit('miner', minerMap);
       } catch (error) {
         consola.error('[CC] Error scheduling next mining cycle:', error);
       }
@@ -457,6 +460,7 @@ class Currency {
       return {
         totalMiners: this.minerMap.size,
         isProcessing: this.isProcessing,
+        validateCirculation: await this.validateCurrencyCirculation(),
         metadata: {
           maxSupply: this.metadata.maxSupply,
           halvingInterval: this.metadata.halvingInterval,
@@ -502,6 +506,17 @@ class Currency {
     } catch (error) {
       throw new Error('[CC] Failed to retrieve transaction history: ' + error);
     }
+  }
+
+  async validateCurrencyCirculation() {
+    const metadata = await prisma.currencyMetadata.findFirst();
+    const inCirculation = await prisma.user.aggregate({
+      _sum: {
+        balance: true
+      }
+    });
+
+    return (metadata.currentSupply === inCirculation._sum.balance);
   }
 
   /**

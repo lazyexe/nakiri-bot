@@ -12,6 +12,6 @@ Command({
   alias: ['test'],
   // eslint-disable-next-line no-unused-vars
   run: async ({ sock, m, options }) => {
-    console.log(await currencyInstance.statusInfo());
+    // console.log(await currencyInstance.validateCurrencyCirculation());
   }
 });
