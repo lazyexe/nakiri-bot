@@ -16,7 +16,9 @@ Command({
     text += `▷ Supply : ${currency.metadata.maxSupply.toLocaleString()}\n`;
     text += `▷ Supply Mined : ${currency.metadata.currentSupply.toLocaleString()}\n`;
     text += `▷ Supply Percentage : ${currency.metadata.supplyPercentage}\n`;
-    text += `▷ Current Reward : ${currency.metadata.currentReward.toLocaleString()}`;
+    text += `▷ Current Reward : ${currency.metadata.currentReward.toLocaleString()}\n`;
+    text += `▷ Chain : ${currency.validateCirculation.status ? 'Valid' : 'Invalid'}\n`;
+    text += `▷ Circulation : ${currency.validateCirculation.inCirculation.toLocaleString()}`;
 
     await m.reply(text);
   }

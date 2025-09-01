@@ -102,7 +102,6 @@ model User {
 
   sentTransaction     Transaction[] @relation("SentTransaction")
   receivedTransaction Transaction[] @relation("ReceivedTransaction")
-  minerTransaction    Transaction[] @relation("MinerTransaction")
   NoteAuthor          Note[]        @relation("NoteAuthor")
 
   @@map("users")
@@ -117,9 +116,8 @@ model Transaction {
   minerJid    String  @default("")
   description String?
 
-  fromUser  User? @relation("SentTransaction", fields: [fromAddress], references: [jid])
-  toUser    User? @relation("ReceivedTransaction", fields: [toAddress], references: [jid])
-  minerUser User? @relation("MinerTransaction", fields: [minerJid], references: [jid])
+  fromUser User? @relation("SentTransaction", fields: [fromAddress], references: [jid])
+  toUser   User? @relation("ReceivedTransaction", fields: [toAddress], references: [jid])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

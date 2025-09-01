@@ -1,5 +1,7 @@
 const { Command } = require('../../../utils/command.js');
 const luxon = require('luxon');
+const currencyInstance = require('../../../utils/currency.js');
+const { prisma } = require('../../../utils/prisma.js');
 
 Command({
   name: 'personal-info',
@@ -8,37 +10,68 @@ Command({
   tags : {
     label : 'personal'
   },
-  run: async ({ sock, m }) => {
-    let text = '*❖ [ Group Status ] ❖*\n';
-    text += `▸ Name : *${m.pushName}*\n`;
-    text += `▸ Balance : *${m.db.user.balance.toLocaleString()}*\n`;
-    text += `▸ Exp : *${m.db.user.exp}*\n`;
-    text += `▸ Subscribe : *${m.db.user.subscription.type.toUpperCase()}*\n`;
-    text += `▸ Registered : *${luxon.DateTime.fromJSDate(new Date(m.db.user.createdAt)).toRelative()}*`;
+  run: async ({ m }) => {
+    let user = m.db.user;
+    let groupParticipant = m.db.groupParticipant;
 
-    if (m.isGroup) {
+    if (m.quoted) {
+      user = await prisma.User.findUnique({ where: { jid: m.quoted.sender } });
+      if (m.isGroup) {
+        groupParticipant = await prisma.GroupParticipant.findUnique({ where: { 
+          groupId_jid: {
+            jid: m.quoted.sender,
+            groupId: m.groupMetadata.id
+          }
+        }});
+      }
+    }
+
+    if (m.content.mentionedJid.length) {
+      user = await prisma.User.findUnique({ where: { jid: m.content.mentionedJid[0] } });
+      if (m.isGroup) {
+        groupParticipant = await prisma.GroupParticipant.findUnique({ where: {
+          groupId_jid: {
+            jid: m.content.mentionedJid[0],
+            groupId: m.groupMetadata.id
+          }  
+        } });
+      }
+    }
+
+    if (!user) return m.reply(__('cmd.personal.me.noUser'));
+
+    let text = '*❖ [ User Status ] ❖*\n';
+    text += `▸ Name : *${user.pushName}*\n`;
+    text += `▸ Balance : *${currencyInstance.roundAmount(user.balance).toFixed(2)}*\n`;
+    text += `▸ Exp : *${user.exp}*\n`;
+    text += `▸ Subscribe : *${user.subscription.type.toUpperCase()}*\n`;
+    text += `▸ Registered : *${luxon.DateTime.fromJSDate(new Date(user.createdAt)).toRelative()}*`;
+
+    if (m.isGroup && groupParticipant) {
       text += '\n\n';
       text += '*❖ [ Group Status ] ❖*\n';
-      text += `▸ Social Credit : *${m.db.groupParticipant.score}*\n`;
-      text += `▸ Strike : *${m.db.groupParticipant.strike}/${m.db.group.maxStrike}*\n`;
-      text += `▸ Role : *${m.groupMetadata.participants.find(v => v.jid === m.sender).admin}*\n`;
+      text += `▸ Social Credit : *${groupParticipant.score}*\n`;
+      text += `▸ Strike : *${groupParticipant.strike}/${m.db.group.maxStrike}*\n`;
+      text += `▸ Role : *${m.groupMetadata.participants.find(v => v.jid === user.jid).admin}*\n`;
     }
 
 
-    let image = null;
-    image = await sock.profilePictureUrl(m.sender, 'image').catch(() => null);
+    // let image = null;
+    // image = await sock.profilePictureUrl(m.sender, 'image').catch(() => null);
 
-    await m.sendMessage(m.chat, {
-      text,
-      contextInfo: {
-        externalAdReply: {
-          title: 'Personal Profile',
-          body: `- ${m.pushName} -`,
-          mediaType: 2,
-          thumbnailUrl: image,
-          sourceUrl: 'https://nakiri.koding.in',
-        }
-      }
-    });
+    // await m.sendMessage(m.chat, {
+    //   text,
+    //   contextInfo: {
+    //     externalAdReply: {
+    //       title: 'Personal Profile',
+    //       body: `- ${m.pushName} -`,
+    //       mediaType: 2,
+    //       thumbnailUrl: image,
+    //       sourceUrl: 'https://nakiri.koding.in',
+    //     }
+    //   }
+    // });
+
+    await m.reply(text);
   }
 });

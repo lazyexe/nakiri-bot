@@ -30,20 +30,20 @@ class Currency {
       if (!init) {
         init = await prisma.CurrencyMetadata.create({
           data: {
-            maxSupply: 100000000,
-            currentSupply: 0,
+            maxSupply: 50000000,
+            currentSupply: 200000,
             initialReward: 100,
-            halvingInterval: 500000,
-            transferFee: 0.01,
+            halvingInterval: 10000000,
+            transferFee: 0.2,
           },
         });
 
-        // init user bank account
         await prisma.user.create({
           data: {
             ...USER_DEFAULT,
             jid: '0@s.whatsapp.net',
             pushName: 'System',
+            balance: init.currentSupply
           },
         });
       }
@@ -80,7 +80,7 @@ class Currency {
    * @param {number} params.amount - Amount to transfer
    * @returns {Promise<Object>} Transaction result
    */
-  async transfer({ fromJid, toJid, amount }) {
+  async transfer({ fromJid, toJid, amount, description = null }) {
     // Input validation
     if (!isJidUser(fromJid) || !isJidUser(toJid)) {
       throw new Error(__('currency.invalidJid'));
@@ -120,11 +120,20 @@ class Currency {
         // Create transaction record
         const transaction = await tx.transaction.create({
           data: {
-            fromAddress: fromUser.jid,
-            toAddress: toUser.jid,
+            fromUser: {
+              connect: {
+                jid: fromUser.jid,
+              },
+            },
+            toUser: {
+              connect: {
+                jid: toUser.jid,
+              },
+            },
             amount: this.roundAmount(amount),
             minerJid: 'none',
             fee,
+            description
           },
         });
 
@@ -170,28 +179,56 @@ class Currency {
     }
   }
 
-  async refund(transactionId) {
-    try {
-      const transaction = await prisma.transaction.findUnique({ where: { id: transactionId } });
+  // async refund(transactionId) {
+  //   try {
+  //     return await prisma.$transaction(async (tx) => {
+  //       const transaction = await tx.transaction.findUnique({ where: { id: transactionId } });
 
-      if (!transaction) {
-        throw new Error(__('currency.transactionNotFound'));
-      }
+  //       if (!transaction) {
+  //         throw new Error(__('currency.transactionNotFound'));
+  //       }
 
-      await prisma.user.update({
-        where: { jid: transaction.fromAddress },
-        data: {
-          balance: { increment: this.roundAmount(transaction.amount + transaction.fee) }
-        },
-      });
+  //       // Update sender balance
+  //       await tx.user.update({
+  //         where: { jid: transaction.fromAddress },
+  //         data: {
+  //           balance: { increment: this.roundAmount(transaction.amount + transaction.fee) }
+  //         },
+  //       });
 
-      await prisma.transaction.delete({ where: { id: transactionId } });
-      
-      return transaction;
-    } catch (error) {
-      throw error;
-    }
-  }
+  //       if (transaction.toAddress === '0@s.whatsapp.net') {
+  //         await tx.user.update({
+  //           where: { jid: transaction.toAddress },
+  //           data: {
+  //             balance: { decrement: this.roundAmount(transaction.amount + transaction.fee) }
+  //           },
+  //         });
+  //       } else {
+  //         // Update receiver balance
+  //         await tx.user.update({
+  //           where: { jid: transaction.toAddress },
+  //           data: {
+  //             balance: { decrement: this.roundAmount(transaction.amount) }
+  //           },
+  //         });
+  
+  //         // costs are borne by the admin
+  //         await tx.user.update({
+  //           where: { jid: '0@s.whatsapp.net' },
+  //           data: {
+  //             balance: { increment: this.roundAmount(transaction.fee) }
+  //           },
+  //         });
+  //       }
+
+  //       await tx.transaction.delete({ where: { id: transactionId } });
+
+  //       return transaction;
+  //     });
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 
   /**
    * Start mining process for a user

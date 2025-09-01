@@ -13,7 +13,7 @@ Command({
     let minBet = 5;
     let maxBet = 500;
     let transaction = null;
-    const bet = parseInt(m.content.textWithoutCommand.trim());
+    const bet = currencyInstance.roundAmount(m.content.textWithoutCommand.trim());
     if (!bet) return m.reply(__('cmd.game.blackjack.ex', { command: m.content.command }));
 
     if(bet == 'all') bet = maxBet;

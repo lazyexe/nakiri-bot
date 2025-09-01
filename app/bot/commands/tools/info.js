@@ -1,5 +1,6 @@
 const { Command } = require('../../../utils/command.js');
 const AnonymousChat = require('../../../utils/AnonymousChat.js');
+const currencyInstance = require('../../../utils/currency.js');
 const { prisma } = require('../../../utils/prisma.js');
 const os = require('os');
 
@@ -14,6 +15,7 @@ Command({
     const AnonChat = new AnonymousChat({ m });
     const info = await AnonChat.info();
     let start = performance.now();
+    const currency = await currencyInstance.statusInfo();
 
     let text = '*`❖ BOT`*\n';
     text += `▷ Total Group : ${Object.keys(await sock.groupFetchAllParticipating()).length.toLocaleString()}\n`;
@@ -24,6 +26,10 @@ Command({
     text += `▷ User In Queue : ${info.users.inQueue.toLocaleString()}\n`;
     text += `▷ User In Chat : ${info.users.inChat.toLocaleString()}\n`;
     text += `▷ Total User Online : ${info.users.total.toLocaleString()}\n`;
+    text += '\n';
+    text += '*`❖ Currency Stats`*\n';
+    text += `▷ Chain : ${currency.validateCirculation.status ? 'Valid' : 'Invalid'}\n`;
+    text += `▷ Supply Mined : ${currency.metadata.supplyPercentage}\n`;
     text += '\n';
     text += '*`❖ OWNER`*\n';
     m.db.bot.owners.forEach((v) => text += `▷ ${v}\n`);

@@ -87,6 +87,9 @@
         },
 
         "personal": {
+            "me": {
+                "noUser": "Pengguna tidak ditemukan."
+            },
             "setlang": {
                 "ex": "Contoh: {command} id\n> Pilihan bahasa: {langs}",
                 "success": "Bahasa diatur ke {lang}."

@@ -42,15 +42,15 @@ module.exports = {
 
         if (dealerValue > 21) {
           winer = 'You win! Dealer bust! 🎉';
-          currencyInstance.transfer({ fromJid: '0@s.whatsapp.net', toJid: m.senderJid, amount: parseInt(game.bet) * 2, description: 'Blackjack Win' });
+          currencyInstance.transfer({ fromJid: '0@s.whatsapp.net', toJid: m.senderJid, amount: game.bet * 2, description: 'Blackjack Win' });
         } else if (dealerValue > playerValue) {
           winer = 'Dealer wins! 🤓';
         } else if (playerValue > dealerValue) {
           winer = 'You win! 🎉';
-          currencyInstance.transfer({ fromJid: '0@s.whatsapp.net', toJid: m.senderJid, amount: parseInt(game.bet) * 2, description: 'Blackjack Win' });
+          currencyInstance.transfer({ fromJid: '0@s.whatsapp.net', toJid: m.senderJid, amount: game.bet * 2, description: 'Blackjack Win' });
         } else {
           winer = 'It\'s a tie! 🤝';
-          currencyInstance.refund(game.transactionId);
+          currencyInstance.transfer({ fromJid: '0@s.whatsapp.net', toJid: m.senderJid, amount: game.bet, description: 'Blackjack Tie' });
         }
 
         let text = `_*${m.db.user.pushName}*, you bet *${game.bet}* to play blackjack._\n\n`;
