@@ -187,6 +187,11 @@
                 "totalWin": "*Total Kemenangan:* {totalWin}",
                 "profit": "*Keuntungan:* {profit}",
                 "loss": "*Kerugian:* {loss}"
+            },
+            "blackjack": {
+                "ex": "Contoh: {command} 5",
+                "min": "Minimal taruhan adalah {minBet}.",
+                "max": "Maksimal taruhan adalah {maxBet}."
             }
         }
     },

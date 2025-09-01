@@ -170,6 +170,29 @@ class Currency {
     }
   }
 
+  async refund(transactionId) {
+    try {
+      const transaction = await prisma.transaction.findUnique({ where: { id: transactionId } });
+
+      if (!transaction) {
+        throw new Error(__('currency.transactionNotFound'));
+      }
+
+      await prisma.user.update({
+        where: { jid: transaction.fromAddress },
+        data: {
+          balance: { increment: this.roundAmount(transaction.amount + transaction.fee) }
+        },
+      });
+
+      await prisma.transaction.delete({ where: { id: transactionId } });
+      
+      return transaction;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   /**
    * Start mining process for a user
    * @param {string} jid - User JID

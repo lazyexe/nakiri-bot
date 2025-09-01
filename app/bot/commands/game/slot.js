@@ -77,7 +77,7 @@ Command({
     if (bet > maxBet) return m.reply(__('cmd.game.jackpot.max', { maxBet }));
 
     try {
-      await currencyInstance.transfer({ fromJid: m.senderJid, toJid: '0@s.whatsapp.net', amount: bet });
+      await currencyInstance.transfer({ fromJid: m.senderJid, toJid: '0@s.whatsapp.net', amount: bet, description: 'Jackpot Bet' });
     } catch (e) {
       return await m.reply(e.message);
     }
