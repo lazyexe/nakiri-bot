@@ -578,7 +578,7 @@ class Currency {
     }
   }
 
-  async getHolder({ limit = 10 }) {
+  async getHolder(limit = 10) {
     try {
       const holders = await prisma.user.findMany({
         orderBy: { balance: 'desc' },

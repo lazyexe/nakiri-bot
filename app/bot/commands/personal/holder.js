@@ -11,9 +11,9 @@ Command({
   run: async ({ m }) => {
     try {
       const result = await currencyInstance.getHolder();
-      let text = '*`❖ Holder`*\n\n';
+      let text = '*`❖ Holder`*\n';
       for (const holder of result) {
-        text += `▸ ${holder.pushName} : ${currencyInstance.roundAmount(holder.balance).toFixed(2)}\n`;
+        text += `▸ ${holder.pushName} : ${currencyInstance.roundAmount(holder.balance).toLocaleString()}\n`;
       }
       m.reply(text);
     } catch (e) {

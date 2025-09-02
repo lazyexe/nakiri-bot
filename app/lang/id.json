@@ -136,6 +136,9 @@
                 "ex": "❖ Penggunaan:\n▷ `{command} list` — Menampilkan daftar owner.\n▷ `{command} add <number>` — Menambahkan owner.\n▷ `{command} remove <number>` — Menghapus owner.",
                 "added": "`{number}` berhasil ditambahkan.",
                 "removed": "`{number}` berhasil dihapus."
+            },
+            "transferBypass": {
+                "ex": "Contoh: {command} <amount> <fromjid> <tojid>"
             }
         },
 
