@@ -5,10 +5,10 @@ import crypto from 'crypto';
 
 const PROB = {
   jackpot: 0.05,
-  twomatch: 0.20,
-  none: 0.75
+  twomatch: 0.30,
+  none: 0.65
 };
-const PAYOUT = { jackpot: 10, twomatch: 2, none: 0 };
+const PAYOUT = { jackpot: 15, twomatch: 2, none: 0 };
 const symbols = ['🍒', '🍋', '🍉', '🍇', '⭐', '💎', '7️⃣'];
 
 function rng01() {
