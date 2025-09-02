@@ -39,6 +39,7 @@ export const handler = async (sock, m, $next) => {
       } else {
         await sock.sendMessage(m.chat, { delete: m.key });
         await sock.groupParticipantsUpdate(m.chat, [m.sender], 'remove');
+        await prisma.groupParticipant.delete({ where: { id: participant.id }});
       }
 
       break;
