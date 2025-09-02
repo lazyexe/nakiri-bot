@@ -34,7 +34,7 @@ class Currency {
             currentSupply: 200000,
             initialReward: 100,
             halvingInterval: 10000000,
-            transferFee: 0.2,
+            transferFee: 0.04,
           },
         });
 
@@ -383,9 +383,9 @@ class Currency {
         this.minerMap.set(minerMap.jid, minerMap);
 
         if (minerMap.remainingMines == 0) {
-          this.removeMiner(minerMap.jid);
-
           this.ev.emit('miner', minerMap);
+          
+          this.removeMiner(minerMap.jid);
         }
       });
 
@@ -563,6 +563,10 @@ class Currency {
 
       const transactions = await prisma.transaction.findMany({
         where: whereClause,
+        include: {
+          fromUser: true,
+          toUser: true,
+        },
         orderBy: { createdAt: 'desc' },
         skip: skipCount,
         take: limit,
@@ -571,6 +575,18 @@ class Currency {
       return transactions;
     } catch (error) {
       throw new Error('[CC] Failed to retrieve transaction history: ' + error);
+    }
+  }
+
+  async getHolder({ limit = 10 }) {
+    try {
+      const holders = await prisma.user.findMany({
+        orderBy: { balance: 'desc' },
+        take: limit,
+      });
+      return holders;
+    } catch (error) {
+      throw new Error('[CC] Failed to retrieve holder list: ' + error);
     }
   }
 

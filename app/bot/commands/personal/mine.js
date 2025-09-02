@@ -10,8 +10,8 @@ Command({
   },
   run: async ({ m }) => {
     try {
-      await currencyInstance.mine({ jid: m.sender, remainingMines: 1, m });
-      currencyInstance.messageHistoryMap.set(m.sender, {
+      await currencyInstance.mine({ jid: m.senderJid, remainingMines: 1, m });
+      currencyInstance.messageHistoryMap.set(m.senderJid, {
         key: m.key,
         message: m.message,
         content: m.content,

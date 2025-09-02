@@ -1,5 +1,6 @@
 import { Command } from '../../../utils/command.js';
 import currencyInstance from '../../../utils/currency.js';
+import * as luxon from 'luxon';
 
 Command({
   name: 'personal-transaction-history',
@@ -29,11 +30,13 @@ Command({
         if (transaction.fromAddress == jid) {
           text += `> Transfer To : ${m.isGroup ? transaction.toAddress.split('@')[0].slice(0, 3) + 'xxx' : transaction.toAddress.split('@')[0]}\n`;
           text += `> Amount : ${transaction.amount}\n`;
-          text += `> Fee : ${transaction.fee}\n\n`;
+          text += `> Fee : ${transaction.fee}\n`;
+          text += `> Date : ${luxon.DateTime.fromJSDate(new Date(transaction.createdAt)).toRelative()}\n\n`;
         } else {
           text += `> Receive From : ${m.isGroup ? transaction.fromAddress.split('@')[0].slice(0, 3) + 'xxx' : transaction.fromAddress.split('@')[0]}\n`;
           text += `> Amount : ${transaction.amount}\n`;
-          text += `> Fee : ${transaction.fee}\n\n`;
+          text += `> Fee : ${transaction.fee}\n`;
+          text += `> Date : ${luxon.DateTime.fromJSDate(new Date(transaction.createdAt)).toRelative()}\n\n`;
         }
       }
 
