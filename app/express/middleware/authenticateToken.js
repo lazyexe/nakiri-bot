@@ -1,6 +1,6 @@
-const { prisma } = require('../../utils/prisma.js');
+import { prisma } from '../../utils/prisma.js';
 
-module.exports = async function (req, res, next) {
+export default async function(req, res, next) {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
   let user = null;

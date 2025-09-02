@@ -1,5 +1,5 @@
-const { Command, tags, commands } = require('../../utils/command.js');
-const { DateTime } = require('luxon');
+import { Command, tags, commands } from '../../utils/command.js';
+import { DateTime } from 'luxon';
 
 Command({
   name: 'menu',

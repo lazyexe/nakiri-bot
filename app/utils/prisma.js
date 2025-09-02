@@ -1,6 +1,6 @@
-const { PrismaClient } = require('../prisma');
-const { consola } = require('consola');
-const { BOT_DEFAULT } = require('../utils/schemaData.js');
+import { PrismaClient } from '../prisma/index.js';
+import { consola } from 'consola';
+import { BOT_DEFAULT } from '../utils/schemaData.js';
 
 let prisma;
 
@@ -46,4 +46,4 @@ const disconnectPrisma = async () => {
   }
 };
 
-module.exports = { prisma, initPrisma, disconnectPrisma };
+export { prisma, initPrisma, disconnectPrisma };

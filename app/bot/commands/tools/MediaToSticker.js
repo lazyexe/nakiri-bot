@@ -1,6 +1,6 @@
-const { default: axios } = require('axios');
-const { Command } = require('../../../utils/command.js');
-const { imageToWebp, videoToWebp, writeExif } = require('../../../utils/sticker.js');
+import { Command } from '../../../utils/command.js';
+import { imageToWebp, videoToWebp, writeExif } from '../../../utils/sticker.js';
+import axios from 'axios';
 
 Command({
   name: 'tools-media-to-sticker',

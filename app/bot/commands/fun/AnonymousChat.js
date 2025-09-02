@@ -1,5 +1,5 @@
-const { Command } = require('../../../utils/command.js');
-const AnonymousChat = require('../../../utils/AnonymousChat.js');
+import { Command } from '../../../utils/command.js';
+import AnonymousChat from '../../../utils/AnonymousChat.js';
 
 Command({
   name: 'anonymouschat-start',

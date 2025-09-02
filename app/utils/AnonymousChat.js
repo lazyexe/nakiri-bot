@@ -1,5 +1,5 @@
 const AnonymousChatMap = new Map();
-const luxon = require('luxon');
+import * as luxon from 'luxon';
 
 class AnonymousChat {
   constructor({ m }) {
@@ -158,4 +158,4 @@ class AnonymousChat {
   }
 }
 
-module.exports = AnonymousChat;
+export default AnonymousChat;

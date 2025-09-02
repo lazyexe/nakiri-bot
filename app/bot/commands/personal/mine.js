@@ -1,5 +1,5 @@
-const { Command } = require('../../../utils/command.js');
-const currencyInstance = require('../../../utils/currency.js');
+import { Command } from '../../../utils/command.js';
+import currencyInstance from '../../../utils/currency.js';
 
 Command({
   name: 'bank-mine',

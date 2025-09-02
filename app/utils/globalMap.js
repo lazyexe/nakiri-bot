@@ -1,5 +1,1 @@
-const deletedMessagesLog = new Map();
-
-module.exports = {
-  deletedMessagesLog
-};
+export const deletedMessagesLog = new Map();

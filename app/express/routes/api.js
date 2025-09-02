@@ -1,9 +1,9 @@
-const express = require('express');
-const authenticateToken = require('../middleware/authenticateToken.js');
-const secretToken = require('../middleware/secretToken.js');
-const { rateLimit } = require('express-rate-limit');
-const GroupController = require('../controller/group.controller.js');
-const AccountController = require('../controller/account.controller.js');
+import express from 'express';
+import authenticateToken from '../middleware/authenticateToken.js';
+import secretToken from '../middleware/secretToken.js';
+import { rateLimit } from 'express-rate-limit';
+import GroupController from '../controller/group.controller.js';
+import AccountController from '../controller/account.controller.js';
 
 const router = express.Router();
 const group = new GroupController();
@@ -54,4 +54,4 @@ accountRouter.get('/groups', middlewareApi, account.MyGroups.bind(account));
 
 router.use('/me', accountRouter);
 
-module.exports = router;
+export default router;

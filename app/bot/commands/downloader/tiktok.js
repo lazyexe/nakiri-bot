@@ -1,5 +1,5 @@
-const { default: got } = require('got');
-const { Command } = require('../../../utils/command.js');
+import { Command } from '../../../utils/command.js';
+import got from 'got';
 
 Command({
   name: 'downloader-tiktok',

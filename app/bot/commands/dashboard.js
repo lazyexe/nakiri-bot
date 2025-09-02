@@ -1,6 +1,6 @@
-const { Command } = require('../../utils/command.js');
-const { prisma } = require('../../utils/prisma.js');
-const crypto = require('crypto');
+import { Command } from '../../utils/command.js';
+import { prisma } from '../../utils/prisma.js';
+import crypto from 'crypto';
 
 Command({
   name: 'dashboard',

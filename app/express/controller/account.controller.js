@@ -1,9 +1,11 @@
-const { z, ZodError } = require('zod');
-const { prisma } = require('../../utils/prisma.js');
-const { bot } = require('../../bot/socket.js');
-const profilePicture = require('../../utils/profilePicture.js');
+import { z, ZodError } from 'zod';
+import { prisma } from '../../utils/prisma.js';
+import { bot } from '../../bot/socket.js';
+import profilePicture from '../../utils/profilePicture.js';
  
 class AccountController {
+  constructor() {}
+  
   async index(req, res) {
     try {
       if (!req.user) {
@@ -199,4 +201,4 @@ class AccountController {
   }
 }
 
-module.exports = AccountController;
+export default AccountController;

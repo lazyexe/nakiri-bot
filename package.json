@@ -4,7 +4,7 @@
   "description": "whatsapp bot services",
   "license": "ISC",
   "author": "ilsyaa",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
@@ -16,7 +16,7 @@
     "@bochilteam/scraper": "^5.0.1",
     "@prisma/client": "^6.10.1",
     "axios": "^1.10.0",
-    "baileys": "github:WhiskeySockets/Baileys",
+    "baileys": "^6.7.19",
     "cheerio": "^1.1.0",
     "chokidar": "^4.0.3",
     "consola": "^3.4.2",

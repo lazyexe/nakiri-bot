@@ -1,16 +1,18 @@
-const currencyInstance = require('../../utils/currency.js');
+import currencyInstance from '../../utils/currency.js';
+import groupHandler from './group.js';
+import messageHandler from './message.js';
 
-module.exports = async function ({
+export default async function ({
   id,
   sock,
   reconnecting
 }) {
-  await require('./group.js')({
+  await groupHandler({
     id,
     sock
   });
 
-  await require('./message.js')({
+  await messageHandler({
     id,
     sock
   });

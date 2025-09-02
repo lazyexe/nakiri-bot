@@ -1,7 +1,7 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
-const routerApi = require('./routes/api.js');
+import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import routerApi from './routes/api.js';
 
 class AppExpress {
   constructor() {
@@ -36,4 +36,4 @@ class AppExpress {
   }
 }
 
-module.exports = AppExpress;
+export default AppExpress;

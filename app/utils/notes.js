@@ -1,4 +1,5 @@
-const { prisma } = require('./prisma.js');
+import { prisma } from './prisma.js';
+
 class Notes {
   async create({
     title,
@@ -163,4 +164,4 @@ class Notes {
 
 
 const NotesInstance = new Notes();
-module.exports = NotesInstance;
+export default NotesInstance;

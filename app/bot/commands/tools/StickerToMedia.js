@@ -1,5 +1,4 @@
-const { Command } = require('../../../utils/command.js');
-const { webpToVideo } = require('../../../utils/sticker.js');
+import { Command } from '../../../utils/command.js';
 
 Command({
   name: 'tools-sticker-to-image',

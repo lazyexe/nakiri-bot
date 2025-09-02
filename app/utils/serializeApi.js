@@ -1,6 +1,6 @@
-const { jidNormalizedUser } = require('baileys');
+import { jidNormalizedUser } from 'baileys';
 
-module.exports = async ({ sock, metadata = null, user = null }) => {
+export default async ({ sock, metadata = null, user = null }) => {
   return {
     isGroup: Boolean(metadata),
     isUserAdmin:

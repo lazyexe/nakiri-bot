@@ -1,5 +1,5 @@
-const { Command } = require('../../../utils/command.js');
-const { generateWAMessageFromContent, WAProto } = require('baileys');
+import { Command } from '../../../utils/command.js';
+import { generateWAMessageFromContent, WAProto } from 'baileys';
 
 Command({
   name: 'group-add',

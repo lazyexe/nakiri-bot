@@ -1,7 +1,7 @@
-const { Command } = require('../../../utils/command.js');
-const currencyInstance = require('../../../utils/currency.js');
-const { delay } = require('baileys');
-const crypto = require('crypto');
+import { Command } from '../../../utils/command.js';
+import currencyInstance from '../../../utils/currency.js';
+import { delay } from 'baileys';
+import crypto from 'crypto';
 
 const PROB = {
   jackpot: 0.05,

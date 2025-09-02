@@ -1,9 +1,7 @@
-const { Command } = require('../../../utils/command.js');
-const { default: axios } = require('axios');
-const {
-  S_WHATSAPP_NET
-} = require('baileys');
-const sharp = require('sharp');
+import { Command } from '../../../utils/command.js';
+import axios from 'axios';
+import { S_WHATSAPP_NET } from 'baileys';
+import sharp from 'sharp';
 
 Command({
   name: 'owner-setpp',

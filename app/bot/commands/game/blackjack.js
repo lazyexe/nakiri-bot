@@ -1,6 +1,6 @@
-const { Command } = require('../../../utils/command.js');
-const currencyInstance = require('../../../utils/currency.js');
-const blackjackInstance = require('../../../utils/blackjack.js');
+import { Command } from '../../../utils/command.js';
+import currencyInstance from '../../../utils/currency.js';
+import blackjackInstance from '../../../utils/blackjack.js';
 
 Command({
   name: 'game-blackjack',

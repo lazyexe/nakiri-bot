@@ -1,6 +1,6 @@
-const { Command } = require('../../../utils/command.js');
-const NotesInstance = require('../../../utils/notes.js');
-const luxon = require('luxon');
+import { Command } from '../../../utils/command.js';
+import NotesInstance from '../../../utils/notes.js';
+import * as luxon from 'luxon';
 
 Command({
   name: 'tools-notes',

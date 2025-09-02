@@ -1,8 +1,8 @@
-const { Command } = require('../../../utils/command.js');
-const AnonymousChat = require('../../../utils/AnonymousChat.js');
-const currencyInstance = require('../../../utils/currency.js');
-const { prisma } = require('../../../utils/prisma.js');
-const os = require('os');
+import { Command } from '../../../utils/command.js';
+import AnonymousChat from '../../../utils/AnonymousChat.js';
+import currencyInstance from '../../../utils/currency.js';
+import { prisma } from '../../../utils/prisma.js';
+import os from 'os';
 
 Command({
   name: 'other-statistic-info-bot',

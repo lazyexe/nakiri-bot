@@ -1,5 +1,4 @@
-const { Command } = require('../../../utils/command.js');
-const luxon = require('luxon');
+import { Command } from '../../../utils/command.js';
 
 Command({
   name: 'group-acc-request',

@@ -1,8 +1,8 @@
-const { Command } = require('../../../utils/command.js');
-const util = require('util');
-const {
+import { Command } from '../../../utils/command.js';
+import util from 'util';
+import {
   exec
-} = require('child_process');
+} from 'child_process';
 
 Command({
   name: 'owner-eval',

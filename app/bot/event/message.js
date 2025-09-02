@@ -1,12 +1,12 @@
-const { default: consola } = require('consola');
-const serialize = require('../../utils/serialize.js');
-const { getAliases } = require('../../utils/command.js');
-const middleware = require('../../bot/middleware/app.js');
-const { prisma } = require('../../utils/prisma.js');
-const { USER_DEFAULT, PARTICIPANT_DEFAULT } = require('../../utils/schemaData.js');
-const { isJidUser } = require('baileys');
+import consola from 'consola';
+import serialize from '../../utils/serialize.js';
+import { getAliases } from '../../utils/command.js';
+import middleware from '../../bot/middleware/app.js';
+import { prisma } from '../../utils/prisma.js';
+import { USER_DEFAULT, PARTICIPANT_DEFAULT } from '../../utils/schemaData.js';
+import { isJidUser } from 'baileys';
 
-module.exports = async function ({
+export default async function ({
   sock
 }) {
   sock.ev.on('messages.upsert', async (event) => {

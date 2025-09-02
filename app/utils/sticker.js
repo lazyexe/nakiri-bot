@@ -1,8 +1,8 @@
-const fs = require('fs');
-const Crypto = require('crypto');
-const ff = require('fluent-ffmpeg');
-const webp = require('node-webpmux');
-const path = require('path');
+import fs from 'fs';
+import Crypto from 'crypto';
+import ff from 'fluent-ffmpeg';
+import webp from 'node-webpmux';
+import path from 'path';
 
 function tmpdir() {
   return path.join(__storagedir, 'temp');
@@ -124,7 +124,7 @@ async function writeExif(mediaBuffer, metadata) {
   }
 }
 
-module.exports = {
+export {
   imageToWebp,
   videoToWebp,
   webpToVideo,

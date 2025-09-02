@@ -1,12 +1,12 @@
-const { default: consola } = require('consola');
-const fs = require('fs');
-const path = require('path');
+import { consola } from 'consola';
+import fs from 'fs';
+import path from 'path';
 
 const translations = {};
 let currentLang = 'en';
 
 function loadLang(lang) {
-  const file = path.join(__dirname, '../lang', `${lang}.json`);
+  const file = path.join(import.meta.dirname, '../lang', `${lang}.json`);
   if (fs.existsSync(file)) {
     translations[lang] = JSON.parse(fs.readFileSync(file, 'utf-8'));
   } else {

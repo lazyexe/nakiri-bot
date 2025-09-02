@@ -1,40 +1,38 @@
-const { default: axios } = require('axios');
-const FormData = require('form-data');
-const { FileTypeParser } = require('file-type');
-const { randomBytes } = require('crypto');
+import axios from 'axios';
+import FormData from 'form-data';
+import { FileTypeParser } from 'file-type';
+import { randomBytes } from 'crypto';
 
-module.exports = {
-  tmpfiles: async (buffer) => {
-    try {
-      const fileType = await new FileTypeParser().fromBuffer(buffer);
-      const { ext } = fileType || {};
-      const formData = createFormData(buffer, 'file', ext);
-      
-      const response = await axios.post(
-        'https://tmpfiles.org/api/v1/upload',
-        formData,
-        {
-          headers: {
-            ...formData.getHeaders(),
-            'User-Agent': fakeUserAgent(),
-          },
+export const tmpfiles = async (buffer) => {
+  try {
+    const fileType = await new FileTypeParser().fromBuffer(buffer);
+    const { ext } = fileType || {};
+    const formData = createFormData(buffer, 'file', ext);
+    
+    const response = await axios.post(
+      'https://tmpfiles.org/api/v1/upload',
+      formData,
+      {
+        headers: {
+          ...formData.getHeaders(),
+          'User-Agent': fakeUserAgent(),
         },
-      );
+      },
+    );
 
-      const result = response.data;
-      const match = /https?:\/\/tmpfiles.org\/(.*)/.exec(result.data.url);
-            
-      if (match && match[1]) {
-        return `https://tmpfiles.org/dl/${match[1]}`;
-      } else {
-        console.error('[UPLOADER] Unexpected URL format:', result.data.url);
-        return null;
-      }
-    } catch (error) {
-      console.error('[UPLOADER] Error uploading file:', error.message);
+    const result = response.data;
+    const match = /https?:\/\/tmpfiles.org\/(.*)/.exec(result.data.url);
+          
+    if (match && match[1]) {
+      return `https://tmpfiles.org/dl/${match[1]}`;
+    } else {
+      console.error('[UPLOADER] Unexpected URL format:', result.data.url);
       return null;
     }
-  },
+  } catch (error) {
+    console.error('[UPLOADER] Error uploading file:', error.message);
+    return null;
+  }
 };
 
 const createFormData = (buffer, fieldName, ext) => {

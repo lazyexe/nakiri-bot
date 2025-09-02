@@ -1,5 +1,5 @@
-const { default: axios } = require('axios');
-const { Command } = require('../../../utils/command.js');
+import { Command } from '../../../utils/command.js';
+import axios from 'axios';
 
 Command({
   name: 'downloader-youtube',

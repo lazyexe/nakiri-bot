@@ -1,9 +1,9 @@
-const { prisma } = require('./prisma.js');
-const { USER_DEFAULT } = require('./schemaData.js');
-const luxon = require('luxon');
-const { isJidUser } = require('baileys');
-const { consola } = require('consola');
-const EventEmitter = require('events');
+import { prisma } from './prisma.js';
+import { USER_DEFAULT } from './schemaData.js';
+import * as luxon from 'luxon';
+import { isJidUser } from 'baileys';
+import { consola } from 'consola';
+import EventEmitter from 'events';
 
 class Currency {
   constructor() {
@@ -603,4 +603,4 @@ class Currency {
 }
 
 const currencyInstance = new Currency();
-module.exports = currencyInstance;
+export default currencyInstance;

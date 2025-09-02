@@ -1,9 +1,9 @@
-const { jidNormalizedUser } = require('baileys');
-const consola = require('consola');
-const { prisma } = require('../../utils/prisma.js');
-const { GROUP_DEFAULT, PARTICIPANT_DEFAULT } = require('../../utils/schemaData.js');
+import { jidNormalizedUser } from 'baileys';
+import consola from 'consola';
+import { prisma } from '../../utils/prisma.js';
+import { GROUP_DEFAULT, PARTICIPANT_DEFAULT } from '../../utils/schemaData.js';
 
-module.exports = async function ({
+export default async function ({
   id,
   sock
 }) {

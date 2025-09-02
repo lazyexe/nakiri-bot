@@ -1,37 +1,38 @@
-require('dotenv').config({});
-const { URL } = require('url');
-const { consola } = require('consola');
-const path = require('path');
+import dotenv from 'dotenv';
+dotenv.config();
+import { consola } from 'consola';
+import path from 'path';
+import { URL } from 'url';
 
 // global variables
-global.__basedir = __dirname;
+global.__basedir = import.meta.dirname;
 global.__storagedir = path.join(__basedir, 'storage');
 
 // init I18n
-require('./app/utils/i18n.js');
+import './app/utils/i18n.js';
 
 // init prisma
-const { initPrisma, disconnectPrisma } = require('./app/utils/prisma.js');
+import { initPrisma, disconnectPrisma } from './app/utils/prisma.js';
 initPrisma();
 
 // init currency
-const currencyInstance = require('./app/utils/currency.js');
+import currencyInstance from './app/utils/currency.js';
 currencyInstance.init();
 
 // init express
 const { hostname, port } = new URL(process.env.APP_URL);
-const AppExpress = require('./app/express/config.js');
+import AppExpress from './app/express/config.js';
 const server = new AppExpress();
 server.app.listen(port || 5570, hostname, () => {
   consola.success(`[EXPRESS] App Listening at ${process.env.APP_URL}`);
 });
 
 // init bot
-const wa = require('./app/bot/socket.js');
-const { initCommands } = require('./app/utils/command.js');
+import { createOrGet as WASocketCreateOrGet } from './app/bot/socket.js';
+import { initCommands } from './app/utils/command.js';
 (async () => {
   await initCommands();
-  await wa.createOrGet({ id: process.env.SESSION_NAME, usePairingCode: true });
+  await WASocketCreateOrGet({ id: process.env.SESSION_NAME, usePairingCode: true });
 })();
 
 process.on('SIGINT', async () => {

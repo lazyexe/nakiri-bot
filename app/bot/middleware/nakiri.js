@@ -1,55 +1,53 @@
-const { delay } = require('baileys');
-const { DateTime } = require('luxon');
-const axios = require('axios');
+import { delay } from 'baileys';
+import axios from 'axios';
+import { DateTime } from 'luxon';
 
 const historyChat = new Map();
 
-module.exports = {
-  handler: async (sock, m, $next, commands) => {
-    if (m.isSenderBot || commands.length > 0) return $next;
+export const handler = async (sock, m, $next, commands) => {
+  if (m.isSenderBot || commands.length > 0) return $next;
 
-    if (m.isGroup) {
-      const isMentioned = m.content.mentionedJid.includes(m.botJid);
-      const isReplyingToBot = m.quoted && m.quoted.sender === m.botJid;
-      const isNameCalled = m.content.text.toLowerCase().includes('nakiri');
+  if (m.isGroup) {
+    const isMentioned = m.content.mentionedJid.includes(m.botJid);
+    const isReplyingToBot = m.quoted && m.quoted.sender === m.botJid;
+    const isNameCalled = m.content.text.toLowerCase().includes('nakiri');
 
-      if (!isMentioned && !isReplyingToBot && !isNameCalled) return $next;
-    }
-
-    try {
-      const history = historyChat.get(m.chat) || [];
-      
-      history.push({ user: m.senderJid.split('@')[0], message: m.content.text });
-
-      let chatHistory = history.map((v) => `@${v.user}: ${v.message}`).join('\n');
-
-      const respons = await axios.post('https://openrouter.ai/api/v1/chat/completions', {
-        messages: [{ role: 'user', content: systemInstruction + chatHistory }, { role: 'user', content: `@${m.senderJid.split('@')[0]} : ` + m.content.text }],
-        model: 'deepseek/deepseek-chat-v3-0324:free',
-      }, {
-        headers: {
-          'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`
-        }
-      });
-
-      const aiReply = respons.data.choices[0].message.content.regexp(/<think>[\s\S]*?<\/think>/g, '').trim();
-      if (aiReply) {
-        history.push({ user: 'Nakiri', message: aiReply });
-        historyChat.set(m.chat, history);
-        
-        await sock.readMessages([m.key]);
-        await sock.sendPresenceUpdate('composing', m.chat);
-        await delay(800 + Math.random() * 1200);
-        await m.reply(aiReply);
-      }
-
-    } catch (error) {
-      console.error('[NAKIRI AI HANDLER ERROR]', error);
-      await m.reply('Aduhh, maaf yaa... Nakiri lagi sibuk wkwk >.<');
-    }
-
-    return $next;
+    if (!isMentioned && !isReplyingToBot && !isNameCalled) return $next;
   }
+
+  try {
+    const history = historyChat.get(m.chat) || [];
+    
+    history.push({ user: m.senderJid.split('@')[0], message: m.content.text });
+
+    let chatHistory = history.map((v) => `@${v.user}: ${v.message}`).join('\n');
+
+    const respons = await axios.post('https://openrouter.ai/api/v1/chat/completions', {
+      messages: [{ role: 'user', content: systemInstruction + chatHistory }, { role: 'user', content: `@${m.senderJid.split('@')[0]} : ` + m.content.text }],
+      model: 'deepseek/deepseek-chat-v3-0324:free',
+    }, {
+      headers: {
+        'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`
+      }
+    });
+
+    const aiReply = respons.data.choices[0].message.content.regexp(/<think>[\s\S]*?<\/think>/g, '').trim();
+    if (aiReply) {
+      history.push({ user: 'Nakiri', message: aiReply });
+      historyChat.set(m.chat, history);
+      
+      await sock.readMessages([m.key]);
+      await sock.sendPresenceUpdate('composing', m.chat);
+      await delay(800 + Math.random() * 1200);
+      await m.reply(aiReply);
+    }
+
+  } catch (error) {
+    console.error('[NAKIRI AI HANDLER ERROR]', error);
+    await m.reply('Aduhh, maaf yaa... Nakiri lagi sibuk wkwk >.<');
+  }
+
+  return $next;
 };
 
 

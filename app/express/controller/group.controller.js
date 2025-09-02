@@ -1,9 +1,9 @@
-const { z, ZodError } = require('zod');
-const { prisma } = require('../../utils/prisma.js');
-const { bot } = require('../../bot/socket.js');
-const profilePicture = require('../../utils/profilePicture.js');
-const serializeApi = require('../../utils/serializeApi.js');
-const { generateWAMessageFromContent, WAProto } = require('baileys');
+import { z, ZodError } from 'zod';
+import { prisma } from '../../utils/prisma.js';
+import { bot } from '../../bot/socket.js';
+import profilePicture from '../../utils/profilePicture.js';
+import serializeApi from '../../utils/serializeApi.js';
+import { generateWAMessageFromContent, WAProto } from 'baileys';
 
 class GroupController {
   async index(req, res) 
@@ -609,4 +609,4 @@ class GroupController {
   }
 }
 
-module.exports = GroupController;
+export default GroupController;

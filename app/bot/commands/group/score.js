@@ -1,5 +1,5 @@
-const { Command } = require('../../../utils/command.js');
-const { prisma } = require('../../../utils/prisma.js');
+import { Command } from '../../../utils/command.js';
+import { prisma } from '../../../utils/prisma.js';
 
 Command({
   name: 'group-score',

@@ -1,5 +1,5 @@
-const { Command } = require('../../../utils/command.js');
-const snapsave = require('../../../utils/scrape/snapsave.js');
+import { Command } from '../../../utils/command.js';
+import { snapsave } from '../../../utils/scrape/snapsave.js';
 
 Command({
   name: 'downloader-facebook',

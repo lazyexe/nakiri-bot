@@ -1,7 +1,7 @@
-const path = require('path');
-const { Command } = require('../../../utils/command.js');
-const { prisma } = require('../../../utils/prisma.js');
-const fs = require('fs');
+import { Command } from '../../../utils/command.js';
+import { prisma } from '../../../utils/prisma.js';
+import fs from 'fs';
+import path from 'path';
 
 Command({
   name: 'personal-setlang',

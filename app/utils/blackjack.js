@@ -62,4 +62,4 @@ class BlackJack {
 }
 
 const BlackjackInstance = new BlackJack();
-module.exports = BlackjackInstance;
+export default BlackjackInstance;

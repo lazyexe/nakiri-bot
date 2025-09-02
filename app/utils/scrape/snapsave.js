@@ -1,7 +1,7 @@
-const cheerio = require('cheerio');
-const got = require('got');
+import * as cheerio from 'cheerio';
+import got from 'got';
 
-async function snapsave(url) {
+export const snapsave = async function(url) {
   let code = await got
     .post('https://snapsave.app/action.php', {
       headers: {
@@ -89,7 +89,7 @@ async function snapsave(url) {
       message: 'Failed to get metadata',
     };
   }
-}
+};
 
 function decryptSnapSaveData(obfuscatedDataString) {
   const args = obfuscatedDataString
@@ -144,5 +144,3 @@ function decryptSnapSaveData(obfuscatedDataString) {
   }
   return decodeURIComponent(encodeURIComponent(decryptedString));
 }
-
-module.exports = snapsave;

@@ -1,6 +1,6 @@
-const { prisma } = require('./prisma.js');
-const { curve } = require('libsignal');
-const { randomBytes, randomUUID } = require('crypto');
+import { prisma } from './prisma.js';
+import { curve } from 'libsignal';
+import { randomBytes, randomUUID } from 'crypto';
 
 const usePrismaAuthState = async ({ session, tableName = 'DeviceAuth' }) => {
   if (!session) {
@@ -251,4 +251,4 @@ const initAuthCreds = () => {
   };
 };
 
-module.exports = usePrismaAuthState;
+export default usePrismaAuthState;

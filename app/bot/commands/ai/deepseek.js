@@ -1,5 +1,5 @@
-const { Command } = require('../../../utils/command.js');
-const Together = require('together-ai');
+import { Command } from '../../../utils/command.js';
+import Together from 'together-ai';
 
 Command({
   name: 'ai-deepseek',

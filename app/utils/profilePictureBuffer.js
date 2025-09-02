@@ -1,9 +1,9 @@
-const { default: axios } = require('axios');
-const fs = require('fs');
-const path = require('path');
-const { DateTime } = require('luxon');
+import axios from 'axios';
+import fs from 'fs';
+import path from 'path';
+import { DateTime } from 'luxon';
 
-module.exports = async function ({ sock = null, jid, name = null }) {
+export default async function ({ sock = null, jid, name = null }) {
   const profilePath = path.join(
     __storagedir,
     'public',

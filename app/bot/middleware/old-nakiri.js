@@ -1,63 +1,61 @@
-const { default: axios } = require('axios');
-const { delay } = require('baileys');
+import { delay } from 'baileys';
+import axios from 'axios';
 
 const historyChat = new Map();
 
-module.exports = {
-  handler: async (sock, m, $next, commands) => {
-    if (m.isSenderBot || commands.length > 0) return $next;
+export const handler = async (sock, m, $next, commands) => {
+  if (m.isSenderBot || commands.length > 0) return $next;
 
-    if (m.isGroup) {
-      const isMentioned = m.content.mentionedJid.includes(m.botJid);
-      const isReplyingToBot = m.quoted && m.quoted.sender === m.botJid;
-      const isNameCalled = m.content.text.toLowerCase().includes('nakiri');
+  if (m.isGroup) {
+    const isMentioned = m.content.mentionedJid.includes(m.botJid);
+    const isReplyingToBot = m.quoted && m.quoted.sender === m.botJid;
+    const isNameCalled = m.content.text.toLowerCase().includes('nakiri');
 
-      if (!isMentioned && !isReplyingToBot && !isNameCalled) return $next;
-    }
-
-    try {
-      const history = historyChat.get(m.chat) || [];
-      await sock.readMessages([m.key]);
-      
-      history.push({ user: m.senderJid.split('@')[0], message: m.content.text });
-
-      let chatHistory = history.map((v) => `@${v.user}: ${v.message}`).join('\n');
-
-      console.log('[NAKIRI AI PROMPT]', systemInstruction + chatHistory);
-      
-      const response = await axios.post('https://text.pollinations.ai', {
-        model: 'openai-large',
-        messages: [{ role: 'system', content: systemInstruction + chatHistory }, { role: 'user', content: `@${m.senderJid.split('@')[0]} : ` + m.content.text }],
-        temperature: 0.8,
-        top_p: 0.9,
-        presence_penalty: 0.6,
-        frequency_penalty: 0.5,
-        seed: Math.floor(Math.random() * 100000),
-        private: true,
-        stream: false
-      }, {
-        headers: {
-          'Authorization': `Bearer ${process.env.POLLINATIONS_AI_API_KEY}`
-        }
-      });
-
-      const aiReply = response.data;
-      if (aiReply) {
-        history.push({ user: 'Nakiri', message: aiReply });
-        historyChat.set(m.chat, history);
-        
-        await sock.sendPresenceUpdate('composing', m.chat);
-        await delay(800 + Math.random() * 1200);
-        await m.reply(aiReply);
-      }
-
-    } catch (error) {
-      console.error('[NAKIRI AI HANDLER ERROR]', error);
-      await m.reply('Aduhh, maaf yaa... Nakiri lagi sibuk wkwk >.<');
-    }
-
-    return $next;
+    if (!isMentioned && !isReplyingToBot && !isNameCalled) return $next;
   }
+
+  try {
+    const history = historyChat.get(m.chat) || [];
+    await sock.readMessages([m.key]);
+    
+    history.push({ user: m.senderJid.split('@')[0], message: m.content.text });
+
+    let chatHistory = history.map((v) => `@${v.user}: ${v.message}`).join('\n');
+
+    console.log('[NAKIRI AI PROMPT]', systemInstruction + chatHistory);
+    
+    const response = await axios.post('https://text.pollinations.ai', {
+      model: 'openai-large',
+      messages: [{ role: 'system', content: systemInstruction + chatHistory }, { role: 'user', content: `@${m.senderJid.split('@')[0]} : ` + m.content.text }],
+      temperature: 0.8,
+      top_p: 0.9,
+      presence_penalty: 0.6,
+      frequency_penalty: 0.5,
+      seed: Math.floor(Math.random() * 100000),
+      private: true,
+      stream: false
+    }, {
+      headers: {
+        'Authorization': `Bearer ${process.env.POLLINATIONS_AI_API_KEY}`
+      }
+    });
+
+    const aiReply = response.data;
+    if (aiReply) {
+      history.push({ user: 'Nakiri', message: aiReply });
+      historyChat.set(m.chat, history);
+      
+      await sock.sendPresenceUpdate('composing', m.chat);
+      await delay(800 + Math.random() * 1200);
+      await m.reply(aiReply);
+    }
+
+  } catch (error) {
+    console.error('[NAKIRI AI HANDLER ERROR]', error);
+    await m.reply('Aduhh, maaf yaa... Nakiri lagi sibuk wkwk >.<');
+  }
+
+  return $next;
 };
 
 const systemInstruction = `

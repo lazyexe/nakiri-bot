@@ -1,19 +1,19 @@
-const { 
-  normalizeMessageContent, 
+import {
+  normalizeMessageContent,
   jidNormalizedUser,
   getContentType,
   isJidGroup,
   downloadMediaMessage,
   isLidUser,
-} = require('baileys');
-const { default: consola } = require('consola');
-const { prisma } = require('../utils/prisma.js');
-const { GROUP_DEFAULT } = require('../utils/schemaData.js');
+} from 'baileys';
+import { consola } from 'consola';
+import { prisma } from '../utils/prisma.js';
+import { GROUP_DEFAULT } from '../utils/schemaData.js';
 
 const MEDIA_TYPE = [ 'imageMessage', 'videoMessage', 'audioMessage', 'documentMessage', 'stickerMessage' ];
 let cacheBotDatabase = null;
 
-module.exports = async function ({ sock, WAMessage }) {
+export default async function ({ sock, WAMessage }) {
   const normalizedMessages = {
     ...WAMessage,
     message: normalizeMessageContent(WAMessage.message),

@@ -1,7 +1,7 @@
-const { Command } = require('../../../utils/command.js');
-const luxon = require('luxon');
-const currencyInstance = require('../../../utils/currency.js');
-const { prisma } = require('../../../utils/prisma.js');
+import { Command } from '../../../utils/command.js';
+import { prisma } from '../../../utils/prisma.js';
+import currencyInstance from '../../../utils/currency.js';
+import * as luxon from 'luxon';
 
 Command({
   name: 'personal-info',
