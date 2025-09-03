@@ -13,11 +13,22 @@ Command({
     if (!m.isSenderAdmin) return;
     if (!m.isBotAdmin) return m.reply(__('cmd.botNotAdmin'));
 
+    // --mention // regex
+    const optMention = m.content.textWithoutCommand.trim().match(/--mention/gi);
+  
     const participantsPrisma = await prisma.GroupParticipant.findMany({
       where: { groupId: m.db.group.groupId },
+      take: 10,
+      include: {
+        user: true,
+      },
       orderBy: { score: 'desc' }
     });
-    
-    m.reply(`*Group Leaderboard*\n\n${participantsPrisma.map((participant, index) => `${index + 1}. @${participant.jid.split('@')[0]} - ${participant.score}`).join('\n')}`);
+  
+    if (optMention) {
+      m.reply(`*Group Leaderboard*\n\n${participantsPrisma.map((participant, index) => `*${index + 1}.* @${participant.jid.split('@')[0]} - \`${participant.score}\``).join('\n')}`);
+    } else {
+      m.reply(`*Group Leaderboard*\n\n${participantsPrisma.map((participant, index) => `*${index + 1}.* ${participant?.user ? participant.user.pushName : participant.jid.split('@')[0]} - \`${participant.score}\``).join('\n')}`);
+    }
   }
 });

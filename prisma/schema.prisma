@@ -70,6 +70,7 @@ model GroupParticipant {
   updatedAt DateTime @updatedAt
 
   group     Group    @relation("participant", fields: [groupId], references: [groupId])
+  user      User?    @relation("user", fields: [jid], references: [jid])
 
   @@unique([groupId, jid])
   @@map("group_participants")
@@ -100,9 +101,10 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  sentTransaction     Transaction[] @relation("SentTransaction")
-  receivedTransaction Transaction[] @relation("ReceivedTransaction")
-  NoteAuthor          Note[]        @relation("NoteAuthor")
+  sentTransaction     Transaction[]        @relation("SentTransaction")
+  receivedTransaction Transaction[]        @relation("ReceivedTransaction")
+  NoteAuthor          Note[]               @relation("NoteAuthor")
+  Participant         GroupParticipant[]   @relation("user")
   
   @@map("users")
 }

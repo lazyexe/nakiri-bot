@@ -1615,12 +1615,14 @@ export namespace Prisma {
     sentTransaction: number
     receivedTransaction: number
     NoteAuthor: number
+    Participant: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sentTransaction?: boolean | UserCountOutputTypeCountSentTransactionArgs
     receivedTransaction?: boolean | UserCountOutputTypeCountReceivedTransactionArgs
     NoteAuthor?: boolean | UserCountOutputTypeCountNoteAuthorArgs
+    Participant?: boolean | UserCountOutputTypeCountParticipantArgs
   }
 
   // Custom InputTypes
@@ -1653,6 +1655,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountNoteAuthorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: NoteWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountParticipantArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GroupParticipantWhereInput
   }
 
 
@@ -4872,6 +4881,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     group?: boolean | GroupDefaultArgs<ExtArgs>
+    user?: boolean | GroupParticipant$userArgs<ExtArgs>
   }, ExtArgs["result"]["groupParticipant"]>
 
 
@@ -4890,12 +4900,14 @@ export namespace Prisma {
   export type GroupParticipantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "groupId" | "jid" | "isAdmin" | "strike" | "score" | "createdAt" | "updatedAt", ExtArgs["result"]["groupParticipant"]>
   export type GroupParticipantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     group?: boolean | GroupDefaultArgs<ExtArgs>
+    user?: boolean | GroupParticipant$userArgs<ExtArgs>
   }
 
   export type $GroupParticipantPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "GroupParticipant"
     objects: {
       group: Prisma.$GroupPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5270,6 +5282,7 @@ export namespace Prisma {
   export interface Prisma__GroupParticipantClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     group<T extends GroupDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GroupDefaultArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends GroupParticipant$userArgs<ExtArgs> = {}>(args?: Subset<T, GroupParticipant$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5674,6 +5687,25 @@ export namespace Prisma {
      * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
      */
     options?: InputJsonValue
+  }
+
+  /**
+   * GroupParticipant.user
+   */
+  export type GroupParticipant$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -6872,6 +6904,7 @@ export namespace Prisma {
     sentTransaction?: boolean | User$sentTransactionArgs<ExtArgs>
     receivedTransaction?: boolean | User$receivedTransactionArgs<ExtArgs>
     NoteAuthor?: boolean | User$NoteAuthorArgs<ExtArgs>
+    Participant?: boolean | User$ParticipantArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6896,6 +6929,7 @@ export namespace Prisma {
     sentTransaction?: boolean | User$sentTransactionArgs<ExtArgs>
     receivedTransaction?: boolean | User$receivedTransactionArgs<ExtArgs>
     NoteAuthor?: boolean | User$NoteAuthorArgs<ExtArgs>
+    Participant?: boolean | User$ParticipantArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -6905,6 +6939,7 @@ export namespace Prisma {
       sentTransaction: Prisma.$TransactionPayload<ExtArgs>[]
       receivedTransaction: Prisma.$TransactionPayload<ExtArgs>[]
       NoteAuthor: Prisma.$NotePayload<ExtArgs>[]
+      Participant: Prisma.$GroupParticipantPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7284,6 +7319,7 @@ export namespace Prisma {
     sentTransaction<T extends User$sentTransactionArgs<ExtArgs> = {}>(args?: Subset<T, User$sentTransactionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     receivedTransaction<T extends User$receivedTransactionArgs<ExtArgs> = {}>(args?: Subset<T, User$receivedTransactionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     NoteAuthor<T extends User$NoteAuthorArgs<ExtArgs> = {}>(args?: Subset<T, User$NoteAuthorArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Participant<T extends User$ParticipantArgs<ExtArgs> = {}>(args?: Subset<T, User$ParticipantArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7763,6 +7799,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: NoteScalarFieldEnum | NoteScalarFieldEnum[]
+  }
+
+  /**
+   * User.Participant
+   */
+  export type User$ParticipantArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GroupParticipant
+     */
+    select?: GroupParticipantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GroupParticipant
+     */
+    omit?: GroupParticipantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GroupParticipantInclude<ExtArgs> | null
+    where?: GroupParticipantWhereInput
+    orderBy?: GroupParticipantOrderByWithRelationInput | GroupParticipantOrderByWithRelationInput[]
+    cursor?: GroupParticipantWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GroupParticipantScalarFieldEnum | GroupParticipantScalarFieldEnum[]
   }
 
   /**
@@ -11379,6 +11439,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"GroupParticipant"> | Date | string
     updatedAt?: DateTimeFilter<"GroupParticipant"> | Date | string
     group?: XOR<GroupScalarRelationFilter, GroupWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }
 
   export type GroupParticipantOrderByWithRelationInput = {
@@ -11391,6 +11452,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     group?: GroupOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
   }
 
   export type GroupParticipantWhereUniqueInput = Prisma.AtLeast<{
@@ -11407,6 +11469,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"GroupParticipant"> | Date | string
     updatedAt?: DateTimeFilter<"GroupParticipant"> | Date | string
     group?: XOR<GroupScalarRelationFilter, GroupWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }, "id" | "groupId_jid">
 
   export type GroupParticipantOrderByWithAggregationInput = {
@@ -11509,6 +11572,7 @@ export namespace Prisma {
     sentTransaction?: TransactionListRelationFilter
     receivedTransaction?: TransactionListRelationFilter
     NoteAuthor?: NoteListRelationFilter
+    Participant?: GroupParticipantListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -11526,6 +11590,7 @@ export namespace Prisma {
     sentTransaction?: TransactionOrderByRelationAggregateInput
     receivedTransaction?: TransactionOrderByRelationAggregateInput
     NoteAuthor?: NoteOrderByRelationAggregateInput
+    Participant?: GroupParticipantOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -11546,6 +11611,7 @@ export namespace Prisma {
     sentTransaction?: TransactionListRelationFilter
     receivedTransaction?: TransactionListRelationFilter
     NoteAuthor?: NoteListRelationFilter
+    Participant?: GroupParticipantListRelationFilter
   }, "id" | "jid">
 
   export type UserOrderByWithAggregationInput = {
@@ -12035,13 +12101,13 @@ export namespace Prisma {
 
   export type GroupParticipantCreateInput = {
     id?: string
-    jid: string
     isAdmin: boolean
     strike: number
     score?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     group: GroupCreateNestedOneWithoutGroupParticipantInput
+    user?: UserCreateNestedOneWithoutParticipantInput
   }
 
   export type GroupParticipantUncheckedCreateInput = {
@@ -12056,13 +12122,13 @@ export namespace Prisma {
   }
 
   export type GroupParticipantUpdateInput = {
-    jid?: StringFieldUpdateOperationsInput | string
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     strike?: IntFieldUpdateOperationsInput | number
     score?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     group?: GroupUpdateOneRequiredWithoutGroupParticipantNestedInput
+    user?: UserUpdateOneWithoutParticipantNestedInput
   }
 
   export type GroupParticipantUncheckedUpdateInput = {
@@ -12087,7 +12153,6 @@ export namespace Prisma {
   }
 
   export type GroupParticipantUpdateManyMutationInput = {
-    jid?: StringFieldUpdateOperationsInput | string
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     strike?: IntFieldUpdateOperationsInput | number
     score?: IntFieldUpdateOperationsInput | number
@@ -12172,6 +12237,7 @@ export namespace Prisma {
     sentTransaction?: TransactionCreateNestedManyWithoutFromUserInput
     receivedTransaction?: TransactionCreateNestedManyWithoutToUserInput
     NoteAuthor?: NoteCreateNestedManyWithoutAuthorInput
+    Participant?: GroupParticipantCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -12189,6 +12255,7 @@ export namespace Prisma {
     sentTransaction?: TransactionUncheckedCreateNestedManyWithoutFromUserInput
     receivedTransaction?: TransactionUncheckedCreateNestedManyWithoutToUserInput
     NoteAuthor?: NoteUncheckedCreateNestedManyWithoutAuthorInput
+    Participant?: GroupParticipantUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -12205,6 +12272,7 @@ export namespace Prisma {
     sentTransaction?: TransactionUpdateManyWithoutFromUserNestedInput
     receivedTransaction?: TransactionUpdateManyWithoutToUserNestedInput
     NoteAuthor?: NoteUpdateManyWithoutAuthorNestedInput
+    Participant?: GroupParticipantUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -12221,6 +12289,7 @@ export namespace Prisma {
     sentTransaction?: TransactionUncheckedUpdateManyWithoutFromUserNestedInput
     receivedTransaction?: TransactionUncheckedUpdateManyWithoutToUserNestedInput
     NoteAuthor?: NoteUncheckedUpdateManyWithoutAuthorNestedInput
+    Participant?: GroupParticipantUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -12769,6 +12838,11 @@ export namespace Prisma {
     isNot?: GroupWhereInput
   }
 
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
   export type GroupParticipantGroupIdJidCompoundUniqueInput = {
     groupId: string
     jid: string
@@ -12969,11 +13043,6 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
-  }
-
-  export type UserNullableScalarRelationFilter = {
-    is?: UserWhereInput | null
-    isNot?: UserWhereInput | null
   }
 
   export type TransactionCountOrderByAggregateInput = {
@@ -13181,12 +13250,28 @@ export namespace Prisma {
     connect?: GroupWhereUniqueInput
   }
 
+  export type UserCreateNestedOneWithoutParticipantInput = {
+    create?: XOR<UserCreateWithoutParticipantInput, UserUncheckedCreateWithoutParticipantInput>
+    connectOrCreate?: UserCreateOrConnectWithoutParticipantInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type GroupUpdateOneRequiredWithoutGroupParticipantNestedInput = {
     create?: XOR<GroupCreateWithoutGroupParticipantInput, GroupUncheckedCreateWithoutGroupParticipantInput>
     connectOrCreate?: GroupCreateOrConnectWithoutGroupParticipantInput
     upsert?: GroupUpsertWithoutGroupParticipantInput
     connect?: GroupWhereUniqueInput
     update?: XOR<XOR<GroupUpdateToOneWithWhereWithoutGroupParticipantInput, GroupUpdateWithoutGroupParticipantInput>, GroupUncheckedUpdateWithoutGroupParticipantInput>
+  }
+
+  export type UserUpdateOneWithoutParticipantNestedInput = {
+    create?: XOR<UserCreateWithoutParticipantInput, UserUncheckedCreateWithoutParticipantInput>
+    connectOrCreate?: UserCreateOrConnectWithoutParticipantInput
+    upsert?: UserUpsertWithoutParticipantInput
+    disconnect?: boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutParticipantInput, UserUpdateWithoutParticipantInput>, UserUncheckedUpdateWithoutParticipantInput>
   }
 
   export type TransactionCreateNestedManyWithoutFromUserInput = {
@@ -13210,6 +13295,13 @@ export namespace Prisma {
     connect?: NoteWhereUniqueInput | NoteWhereUniqueInput[]
   }
 
+  export type GroupParticipantCreateNestedManyWithoutUserInput = {
+    create?: XOR<GroupParticipantCreateWithoutUserInput, GroupParticipantUncheckedCreateWithoutUserInput> | GroupParticipantCreateWithoutUserInput[] | GroupParticipantUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GroupParticipantCreateOrConnectWithoutUserInput | GroupParticipantCreateOrConnectWithoutUserInput[]
+    createMany?: GroupParticipantCreateManyUserInputEnvelope
+    connect?: GroupParticipantWhereUniqueInput | GroupParticipantWhereUniqueInput[]
+  }
+
   export type TransactionUncheckedCreateNestedManyWithoutFromUserInput = {
     create?: XOR<TransactionCreateWithoutFromUserInput, TransactionUncheckedCreateWithoutFromUserInput> | TransactionCreateWithoutFromUserInput[] | TransactionUncheckedCreateWithoutFromUserInput[]
     connectOrCreate?: TransactionCreateOrConnectWithoutFromUserInput | TransactionCreateOrConnectWithoutFromUserInput[]
@@ -13229,6 +13321,13 @@ export namespace Prisma {
     connectOrCreate?: NoteCreateOrConnectWithoutAuthorInput | NoteCreateOrConnectWithoutAuthorInput[]
     createMany?: NoteCreateManyAuthorInputEnvelope
     connect?: NoteWhereUniqueInput | NoteWhereUniqueInput[]
+  }
+
+  export type GroupParticipantUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<GroupParticipantCreateWithoutUserInput, GroupParticipantUncheckedCreateWithoutUserInput> | GroupParticipantCreateWithoutUserInput[] | GroupParticipantUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GroupParticipantCreateOrConnectWithoutUserInput | GroupParticipantCreateOrConnectWithoutUserInput[]
+    createMany?: GroupParticipantCreateManyUserInputEnvelope
+    connect?: GroupParticipantWhereUniqueInput | GroupParticipantWhereUniqueInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -13286,6 +13385,20 @@ export namespace Prisma {
     deleteMany?: NoteScalarWhereInput | NoteScalarWhereInput[]
   }
 
+  export type GroupParticipantUpdateManyWithoutUserNestedInput = {
+    create?: XOR<GroupParticipantCreateWithoutUserInput, GroupParticipantUncheckedCreateWithoutUserInput> | GroupParticipantCreateWithoutUserInput[] | GroupParticipantUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GroupParticipantCreateOrConnectWithoutUserInput | GroupParticipantCreateOrConnectWithoutUserInput[]
+    upsert?: GroupParticipantUpsertWithWhereUniqueWithoutUserInput | GroupParticipantUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: GroupParticipantCreateManyUserInputEnvelope
+    set?: GroupParticipantWhereUniqueInput | GroupParticipantWhereUniqueInput[]
+    disconnect?: GroupParticipantWhereUniqueInput | GroupParticipantWhereUniqueInput[]
+    delete?: GroupParticipantWhereUniqueInput | GroupParticipantWhereUniqueInput[]
+    connect?: GroupParticipantWhereUniqueInput | GroupParticipantWhereUniqueInput[]
+    update?: GroupParticipantUpdateWithWhereUniqueWithoutUserInput | GroupParticipantUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: GroupParticipantUpdateManyWithWhereWithoutUserInput | GroupParticipantUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: GroupParticipantScalarWhereInput | GroupParticipantScalarWhereInput[]
+  }
+
   export type TransactionUncheckedUpdateManyWithoutFromUserNestedInput = {
     create?: XOR<TransactionCreateWithoutFromUserInput, TransactionUncheckedCreateWithoutFromUserInput> | TransactionCreateWithoutFromUserInput[] | TransactionUncheckedCreateWithoutFromUserInput[]
     connectOrCreate?: TransactionCreateOrConnectWithoutFromUserInput | TransactionCreateOrConnectWithoutFromUserInput[]
@@ -13326,6 +13439,20 @@ export namespace Prisma {
     update?: NoteUpdateWithWhereUniqueWithoutAuthorInput | NoteUpdateWithWhereUniqueWithoutAuthorInput[]
     updateMany?: NoteUpdateManyWithWhereWithoutAuthorInput | NoteUpdateManyWithWhereWithoutAuthorInput[]
     deleteMany?: NoteScalarWhereInput | NoteScalarWhereInput[]
+  }
+
+  export type GroupParticipantUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<GroupParticipantCreateWithoutUserInput, GroupParticipantUncheckedCreateWithoutUserInput> | GroupParticipantCreateWithoutUserInput[] | GroupParticipantUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GroupParticipantCreateOrConnectWithoutUserInput | GroupParticipantCreateOrConnectWithoutUserInput[]
+    upsert?: GroupParticipantUpsertWithWhereUniqueWithoutUserInput | GroupParticipantUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: GroupParticipantCreateManyUserInputEnvelope
+    set?: GroupParticipantWhereUniqueInput | GroupParticipantWhereUniqueInput[]
+    disconnect?: GroupParticipantWhereUniqueInput | GroupParticipantWhereUniqueInput[]
+    delete?: GroupParticipantWhereUniqueInput | GroupParticipantWhereUniqueInput[]
+    connect?: GroupParticipantWhereUniqueInput | GroupParticipantWhereUniqueInput[]
+    update?: GroupParticipantUpdateWithWhereUniqueWithoutUserInput | GroupParticipantUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: GroupParticipantUpdateManyWithWhereWithoutUserInput | GroupParticipantUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: GroupParticipantScalarWhereInput | GroupParticipantScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutSentTransactionInput = {
@@ -13584,12 +13711,12 @@ export namespace Prisma {
 
   export type GroupParticipantCreateWithoutGroupInput = {
     id?: string
-    jid: string
     isAdmin: boolean
     strike: number
     score?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutParticipantInput
   }
 
   export type GroupParticipantUncheckedCreateWithoutGroupInput = {
@@ -13684,6 +13811,45 @@ export namespace Prisma {
     create: XOR<GroupCreateWithoutGroupParticipantInput, GroupUncheckedCreateWithoutGroupParticipantInput>
   }
 
+  export type UserCreateWithoutParticipantInput = {
+    id?: string
+    jid: string
+    pushName?: string | null
+    exp?: number
+    subscription?: InputJsonValue
+    banStatus?: InputJsonValue
+    token?: string
+    lang?: string
+    balance?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sentTransaction?: TransactionCreateNestedManyWithoutFromUserInput
+    receivedTransaction?: TransactionCreateNestedManyWithoutToUserInput
+    NoteAuthor?: NoteCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserUncheckedCreateWithoutParticipantInput = {
+    id?: string
+    jid: string
+    pushName?: string | null
+    exp?: number
+    subscription?: InputJsonValue
+    banStatus?: InputJsonValue
+    token?: string
+    lang?: string
+    balance?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sentTransaction?: TransactionUncheckedCreateNestedManyWithoutFromUserInput
+    receivedTransaction?: TransactionUncheckedCreateNestedManyWithoutToUserInput
+    NoteAuthor?: NoteUncheckedCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserCreateOrConnectWithoutParticipantInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutParticipantInput, UserUncheckedCreateWithoutParticipantInput>
+  }
+
   export type GroupUpsertWithoutGroupParticipantInput = {
     update: XOR<GroupUpdateWithoutGroupParticipantInput, GroupUncheckedUpdateWithoutGroupParticipantInput>
     create: XOR<GroupCreateWithoutGroupParticipantInput, GroupUncheckedCreateWithoutGroupParticipantInput>
@@ -13729,6 +13895,49 @@ export namespace Prisma {
     lang?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutParticipantInput = {
+    update: XOR<UserUpdateWithoutParticipantInput, UserUncheckedUpdateWithoutParticipantInput>
+    create: XOR<UserCreateWithoutParticipantInput, UserUncheckedCreateWithoutParticipantInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutParticipantInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutParticipantInput, UserUncheckedUpdateWithoutParticipantInput>
+  }
+
+  export type UserUpdateWithoutParticipantInput = {
+    jid?: StringFieldUpdateOperationsInput | string
+    pushName?: NullableStringFieldUpdateOperationsInput | string | null
+    exp?: IntFieldUpdateOperationsInput | number
+    subscription?: InputJsonValue | InputJsonValue
+    banStatus?: InputJsonValue | InputJsonValue
+    token?: StringFieldUpdateOperationsInput | string
+    lang?: StringFieldUpdateOperationsInput | string
+    balance?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sentTransaction?: TransactionUpdateManyWithoutFromUserNestedInput
+    receivedTransaction?: TransactionUpdateManyWithoutToUserNestedInput
+    NoteAuthor?: NoteUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutParticipantInput = {
+    jid?: StringFieldUpdateOperationsInput | string
+    pushName?: NullableStringFieldUpdateOperationsInput | string | null
+    exp?: IntFieldUpdateOperationsInput | number
+    subscription?: InputJsonValue | InputJsonValue
+    banStatus?: InputJsonValue | InputJsonValue
+    token?: StringFieldUpdateOperationsInput | string
+    lang?: StringFieldUpdateOperationsInput | string
+    balance?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sentTransaction?: TransactionUncheckedUpdateManyWithoutFromUserNestedInput
+    receivedTransaction?: TransactionUncheckedUpdateManyWithoutToUserNestedInput
+    NoteAuthor?: NoteUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type TransactionCreateWithoutFromUserInput = {
@@ -13822,6 +14031,35 @@ export namespace Prisma {
     data: NoteCreateManyAuthorInput | NoteCreateManyAuthorInput[]
   }
 
+  export type GroupParticipantCreateWithoutUserInput = {
+    id?: string
+    isAdmin: boolean
+    strike: number
+    score?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    group: GroupCreateNestedOneWithoutGroupParticipantInput
+  }
+
+  export type GroupParticipantUncheckedCreateWithoutUserInput = {
+    id?: string
+    groupId: string
+    isAdmin: boolean
+    strike: number
+    score?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GroupParticipantCreateOrConnectWithoutUserInput = {
+    where: GroupParticipantWhereUniqueInput
+    create: XOR<GroupParticipantCreateWithoutUserInput, GroupParticipantUncheckedCreateWithoutUserInput>
+  }
+
+  export type GroupParticipantCreateManyUserInputEnvelope = {
+    data: GroupParticipantCreateManyUserInput | GroupParticipantCreateManyUserInput[]
+  }
+
   export type TransactionUpsertWithWhereUniqueWithoutFromUserInput = {
     where: TransactionWhereUniqueInput
     update: XOR<TransactionUpdateWithoutFromUserInput, TransactionUncheckedUpdateWithoutFromUserInput>
@@ -13899,6 +14137,22 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Note"> | Date | string
   }
 
+  export type GroupParticipantUpsertWithWhereUniqueWithoutUserInput = {
+    where: GroupParticipantWhereUniqueInput
+    update: XOR<GroupParticipantUpdateWithoutUserInput, GroupParticipantUncheckedUpdateWithoutUserInput>
+    create: XOR<GroupParticipantCreateWithoutUserInput, GroupParticipantUncheckedCreateWithoutUserInput>
+  }
+
+  export type GroupParticipantUpdateWithWhereUniqueWithoutUserInput = {
+    where: GroupParticipantWhereUniqueInput
+    data: XOR<GroupParticipantUpdateWithoutUserInput, GroupParticipantUncheckedUpdateWithoutUserInput>
+  }
+
+  export type GroupParticipantUpdateManyWithWhereWithoutUserInput = {
+    where: GroupParticipantScalarWhereInput
+    data: XOR<GroupParticipantUpdateManyMutationInput, GroupParticipantUncheckedUpdateManyWithoutUserInput>
+  }
+
   export type UserCreateWithoutSentTransactionInput = {
     id?: string
     jid: string
@@ -13913,6 +14167,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     receivedTransaction?: TransactionCreateNestedManyWithoutToUserInput
     NoteAuthor?: NoteCreateNestedManyWithoutAuthorInput
+    Participant?: GroupParticipantCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSentTransactionInput = {
@@ -13929,6 +14184,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     receivedTransaction?: TransactionUncheckedCreateNestedManyWithoutToUserInput
     NoteAuthor?: NoteUncheckedCreateNestedManyWithoutAuthorInput
+    Participant?: GroupParticipantUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSentTransactionInput = {
@@ -13950,6 +14206,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sentTransaction?: TransactionCreateNestedManyWithoutFromUserInput
     NoteAuthor?: NoteCreateNestedManyWithoutAuthorInput
+    Participant?: GroupParticipantCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReceivedTransactionInput = {
@@ -13966,6 +14223,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sentTransaction?: TransactionUncheckedCreateNestedManyWithoutFromUserInput
     NoteAuthor?: NoteUncheckedCreateNestedManyWithoutAuthorInput
+    Participant?: GroupParticipantUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReceivedTransactionInput = {
@@ -13997,6 +14255,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     receivedTransaction?: TransactionUpdateManyWithoutToUserNestedInput
     NoteAuthor?: NoteUpdateManyWithoutAuthorNestedInput
+    Participant?: GroupParticipantUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSentTransactionInput = {
@@ -14012,6 +14271,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     receivedTransaction?: TransactionUncheckedUpdateManyWithoutToUserNestedInput
     NoteAuthor?: NoteUncheckedUpdateManyWithoutAuthorNestedInput
+    Participant?: GroupParticipantUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutReceivedTransactionInput = {
@@ -14038,6 +14298,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sentTransaction?: TransactionUpdateManyWithoutFromUserNestedInput
     NoteAuthor?: NoteUpdateManyWithoutAuthorNestedInput
+    Participant?: GroupParticipantUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivedTransactionInput = {
@@ -14053,6 +14314,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sentTransaction?: TransactionUncheckedUpdateManyWithoutFromUserNestedInput
     NoteAuthor?: NoteUncheckedUpdateManyWithoutAuthorNestedInput
+    Participant?: GroupParticipantUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutNoteAuthorInput = {
@@ -14069,6 +14331,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sentTransaction?: TransactionCreateNestedManyWithoutFromUserInput
     receivedTransaction?: TransactionCreateNestedManyWithoutToUserInput
+    Participant?: GroupParticipantCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNoteAuthorInput = {
@@ -14085,6 +14348,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sentTransaction?: TransactionUncheckedCreateNestedManyWithoutFromUserInput
     receivedTransaction?: TransactionUncheckedCreateNestedManyWithoutToUserInput
+    Participant?: GroupParticipantUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNoteAuthorInput = {
@@ -14116,6 +14380,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sentTransaction?: TransactionUpdateManyWithoutFromUserNestedInput
     receivedTransaction?: TransactionUpdateManyWithoutToUserNestedInput
+    Participant?: GroupParticipantUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNoteAuthorInput = {
@@ -14131,6 +14396,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sentTransaction?: TransactionUncheckedUpdateManyWithoutFromUserNestedInput
     receivedTransaction?: TransactionUncheckedUpdateManyWithoutToUserNestedInput
+    Participant?: GroupParticipantUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type GroupParticipantCreateManyGroupInput = {
@@ -14144,12 +14410,12 @@ export namespace Prisma {
   }
 
   export type GroupParticipantUpdateWithoutGroupInput = {
-    jid?: StringFieldUpdateOperationsInput | string
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     strike?: IntFieldUpdateOperationsInput | number
     score?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutParticipantNestedInput
   }
 
   export type GroupParticipantUncheckedUpdateWithoutGroupInput = {
@@ -14198,6 +14464,16 @@ export namespace Prisma {
     title: string
     content: string
     password?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GroupParticipantCreateManyUserInput = {
+    id?: string
+    groupId: string
+    isAdmin: boolean
+    strike: number
+    score?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14285,6 +14561,33 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GroupParticipantUpdateWithoutUserInput = {
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    strike?: IntFieldUpdateOperationsInput | number
+    score?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    group?: GroupUpdateOneRequiredWithoutGroupParticipantNestedInput
+  }
+
+  export type GroupParticipantUncheckedUpdateWithoutUserInput = {
+    groupId?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    strike?: IntFieldUpdateOperationsInput | number
+    score?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GroupParticipantUncheckedUpdateManyWithoutUserInput = {
+    groupId?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    strike?: IntFieldUpdateOperationsInput | number
+    score?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
