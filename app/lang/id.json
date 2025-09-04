@@ -123,6 +123,9 @@
             },
             "ytdl": {
                 "ex": "Contoh: {command} 144p https://www.youtube.com/watch?v=xxxxxx\nResolusi yang tersedia: {formats}"
+            },
+            "github": {
+                "ex": "Contoh: {command} https://github.com/xxxxxx"
             }
         },
 

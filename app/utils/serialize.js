@@ -27,10 +27,12 @@ export default async function ({ sock, WAMessage }) {
   const isGroup = isJidGroup(chat);
   const groupMetadata = isGroup ? await sock.getGroupCache(chat) : {};
   const dbGroup = isGroup ? await fetchGroupFromDatabase(groupMetadata) : null;
-
+  
   const senderJid = isGroup || broadcast ? (isLidUser(key.participant) ? key.participantPn : key.participant) : (key.fromMe ? jidNormalizedUser(sock?.user?.id) : chat);
   const senderLid = isGroup || broadcast ? (isLidUser(key.participant) ? key.participant : key.participantLid) : (key.fromMe ? jidNormalizedUser(sock?.user?.id) : key.senderLid);
   const sender = senderJid;
+  
+  const isSenderOwner = dbBot.owners.some((owner) => owner == sender?.split('@')[0]) || false;
 
   const mtype = getContentType(message);
   const content = getMessageContent(message, dbBot);
@@ -49,9 +51,9 @@ export default async function ({ sock, WAMessage }) {
 
     isGroup,
     isSenderBot: Boolean(senderJid === botJid),
-    isSenderOwner: dbBot.owners.includes(sender?.split('@')[0]) ? true : false,
-    isSenderSuperAdmin: isGroup && groupMetadata?.participants?.some((participant) => participant.jid === senderJid && participant.admin == 'superadmin') || false,
-    isSenderAdmin: isGroup && groupMetadata?.participants?.some((participant) => participant.jid === senderJid && (participant.admin == 'admin' || participant.admin == 'superadmin')) || false,
+    isSenderOwner,
+    isSenderSuperAdmin: isGroup && groupMetadata?.participants?.some((participant) => participant.jid === senderJid && participant.admin == 'superadmin') || isSenderOwner || false,
+    isSenderAdmin: isGroup && groupMetadata?.participants?.some((participant) => participant.jid === senderJid && (participant.admin == 'admin' || participant.admin == 'superadmin')) || isSenderOwner || false,
     isBotSuperAdmin: isGroup && groupMetadata?.participants?.some((participant) => participant.jid === botJid && participant.admin == 'superadmin') || false,
     isBotAdmin: isGroup && groupMetadata?.participants?.some((participant) => participant.jid === botJid && (participant.admin == 'admin' || participant.admin == 'superadmin')) || false,
 
