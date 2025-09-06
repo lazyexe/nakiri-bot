@@ -143,9 +143,9 @@ export const createOrGet = async ({
       }
 
       if(connection === 'close') {
-        const shouldReconnect = (lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut && lastDisconnect.error?.output?.statusCode !== DisconnectReason.badSession);
-        // const shouldReconnect = (lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut);
-        consola.warn('connection closed due to ', lastDisconnect.error, ', reconnecting ', shouldReconnect);
+        // const shouldReconnect = (lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut && lastDisconnect.error?.output?.statusCode !== DisconnectReason.badSession);
+        const shouldReconnect = (lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut);
+        // consola.warn('connection closed due to ', lastDisconnect.error, ', reconnecting ', shouldReconnect);
 
         if(shouldReconnect) {
           socket?.emit('device:status', {
