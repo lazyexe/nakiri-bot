@@ -12,10 +12,8 @@ Command({
     await server.get();
 
     let text = '*❖ Minecraft Survial Server*';
-    text += '\n▷ Name : ' + server.name;
     text += '\n▷ IP Java : ' + '`underworld.ilsya.my.id`';
     text += '\n▷ IP Bedrock : ' + 'Coming Soon';
-    text += '\n▷ Client Required : ' + 'Vanilla Minecraft 1.21.8';
     text += '\n\n';
     text += '*❖ Software Server*';
     text += '\n▷ Name : ' + server.software.name;

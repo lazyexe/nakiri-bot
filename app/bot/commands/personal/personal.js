@@ -38,39 +38,26 @@ Command({
       }
     }
 
-    if (!user) return m.reply(__('cmd.personal.me.noUser'));
-
-    let text = '*❖ [ User Status ] ❖*\n';
-    text += `▸ Name : *${user.pushName}*\n`;
-    text += `▸ Balance : *${currencyInstance.roundAmount(user.balance).toFixed(2)}*\n`;
-    text += `▸ Exp : *${user.exp}*\n`;
-    text += `▸ Subscribe : *${user.subscription.type.toUpperCase()}*\n`;
-    text += `▸ Registered : *${luxon.DateTime.fromJSDate(new Date(user.createdAt)).toRelative()}*`;
+    let text;
+    
+    if (user) {
+      text += '*❖ [ User Status ] ❖*\n';
+      text += `▸ Name : *${user.pushName}*\n`;
+      text += `▸ Balance : *${currencyInstance.roundAmount(user.balance).toFixed(2)}*\n`;
+      text += `▸ Exp : *${user.exp}*\n`;
+      text += `▸ Subscribe : *${user.subscription.type.toUpperCase()}*\n`;
+      text += `▸ Registered : *${luxon.DateTime.fromJSDate(new Date(user.createdAt)).toRelative()}*`;
+    }
 
     if (m.isGroup && groupParticipant) {
-      text += '\n\n';
+      if (user) {
+        text += '\n\n';
+      }
       text += '*❖ [ Group Status ] ❖*\n';
       text += `▸ Social Credit : *${groupParticipant.score}*\n`;
       text += `▸ Strike : *${groupParticipant.strike}/${m.db.group.maxStrike}*\n`;
       text += `▸ Role : *${m.groupMetadata.participants.find(v => v.jid === user.jid).admin}*\n`;
     }
-
-
-    // let image = null;
-    // image = await sock.profilePictureUrl(m.sender, 'image').catch(() => null);
-
-    // await m.sendMessage(m.chat, {
-    //   text,
-    //   contextInfo: {
-    //     externalAdReply: {
-    //       title: 'Personal Profile',
-    //       body: `- ${m.pushName} -`,
-    //       mediaType: 2,
-    //       thumbnailUrl: image,
-    //       sourceUrl: 'https://nakiri.koding.in',
-    //     }
-    //   }
-    // });
 
     await m.reply(text);
   }

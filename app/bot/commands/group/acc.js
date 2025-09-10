@@ -15,12 +15,19 @@ Command({
     const maxMemberGroup = 1025;
     const curretMemberGroup = m.groupMetadata.size;
     const reminingMember = maxMemberGroup - curretMemberGroup;
+    m.react('⌛');
     
-    if (reminingMember == 0) return m.reply(__('cmd.group.acc.max', { maxMemberGroup, curretMemberGroup }));
+    if (reminingMember == 0) {
+      m.react('');
+      return m.reply(__('cmd.group.acc.max', { maxMemberGroup, curretMemberGroup }));
+    }
 
     let joinRequestList = await sock.groupRequestParticipantsList(m.groupMetadata.id);
 
-    if (joinRequestList.length == 0) return m.reply(__('cmd.group.acc.noRequest'));
+    if (joinRequestList.length == 0) {
+      m.react('');
+      return m.reply(__('cmd.group.acc.noRequest'));
+    }
 
     joinRequestList = joinRequestList.sort((a, b) => Number(a.request_time) - Number(b.request_time));
     let currentRemining = reminingMember;
@@ -34,7 +41,6 @@ Command({
       }
       currentRemining--;
     }
-
-    await m.reply(__('cmd.group.acc.success', { totalApprove: reminingMember, totalSuccess: reminingMember - error_number.length }));
+    m.react('✨');
   }
 });

@@ -13,7 +13,7 @@ Command({
       const result = await currencyInstance.getHolder();
       let text = '*`❖ Holder`*\n';
       for (const holder of result) {
-        text += `▸ ${holder.pushName} : ${currencyInstance.roundAmount(holder.balance).toFixed(2).toLocaleString()}\n`;
+        text += `▸ ${holder.pushName} : ${currencyInstance.roundAmount(holder.balance).toFixed(2)}\n`;
       }
       m.reply(text);
     } catch (e) {

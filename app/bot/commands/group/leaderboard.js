@@ -18,7 +18,7 @@ Command({
   
     const participantsPrisma = await prisma.GroupParticipant.findMany({
       where: { groupId: m.db.group.groupId },
-      take: 10,
+      take: 15,
       include: {
         user: true,
       },
@@ -26,9 +26,9 @@ Command({
     });
   
     if (optMention) {
-      m.reply(`*Group Leaderboard*\n\n${participantsPrisma.map((participant, index) => `*${index + 1}.* @${participant.jid.split('@')[0]} - \`${participant.score}\``).join('\n')}`);
+      m.reply(`*Top 15 King Yapping*\n\n${participantsPrisma.map((participant, index) => `*${index + 1}.* @${participant.jid.split('@')[0]} - \`${participant.score}\``).join('\n')}`);
     } else {
-      m.reply(`*Group Leaderboard*\n\n${participantsPrisma.map((participant, index) => `*${index + 1}.* ${participant?.user ? participant.user.pushName : participant.jid.split('@')[0]} - \`${participant.score}\``).join('\n')}`);
+      m.reply(`*Top 15 King Yapping*\n\n${participantsPrisma.map((participant, index) => `*${index + 1}.* ${participant?.user ? participant.user.pushName : participant.jid.split('@')[0]} - \`${participant.score}\``).join('\n')}`);
     }
   }
 });
