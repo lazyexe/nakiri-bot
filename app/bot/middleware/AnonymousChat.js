@@ -1,10 +1,10 @@
-import { isJidUser } from 'baileys';
+import { isPnUser } from 'baileys';
 import AnonymousChat from '../../utils/AnonymousChat.js';
 
 export const handler = async (sock, m, $next) => {
   if (m.isSenderBot) return $next;
   if (m.isGroup) return $next;
-  if (!isJidUser(m.sender)) return $next;
+  if (!isPnUser(m.sender)) return $next;
 
   const anonchat = new AnonymousChat({ m });
   const chat = anonchat.map.get(m.sender);

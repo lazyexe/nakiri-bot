@@ -32,7 +32,7 @@ export const createOrGet = async ({
   }
 
   const [ deviceId, deviceNumber ] = id.split('-');
-  const { state, saveCreds } = process.env.NODE_ENV === 'production' ? await usePrismaAuthState({ session: id }) : await useMultiFileAuthState(`${__storagedir}/baileys/${id}`);
+  const { state, saveCreds } = await usePrismaAuthState({ session: id });
   const groupCache = new NodeCache({ stdTTL: 300 });
 
   const sock = makeWASocket({
@@ -209,14 +209,10 @@ export const destroy = async (id) => {
 
       sock.ev.removeAllListeners();
 
-      if (process.env.NODE_ENV === 'production') {
-        const { removeCreds } = await usePrismaAuthState({
-          session: id,
-        });
-        removeCreds();
-      } else {
-        fs.unlinkSync(`${__storagedir}/baileys/${id}/creds.json`);
-      }
+      const { removeCreds } = await usePrismaAuthState({
+        session: id,
+      });
+      removeCreds();
       consola.info(`[WA: ${id}] Creds removed.`);
 
       SESSIONS.delete(id);

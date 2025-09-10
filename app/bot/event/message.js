@@ -4,7 +4,7 @@ import { getAliases } from '../../utils/command.js';
 import middleware from '../../bot/middleware/app.js';
 import { prisma } from '../../utils/prisma.js';
 import { USER_DEFAULT, PARTICIPANT_DEFAULT } from '../../utils/schemaData.js';
-import { isJidUser } from 'baileys';
+import { isPnUser } from 'baileys';
 
 export default async function ({
   sock
@@ -23,7 +23,7 @@ export default async function ({
         WAMessage: message,
       });
 
-      if (m.isGroup && isJidUser(m.sender)) {
+      if (m.isGroup && isPnUser(m.sender)) {
         m.db.groupParticipant = await prisma.groupParticipant.upsert({
           where: {
             groupId_jid: {
@@ -41,7 +41,7 @@ export default async function ({
         });
       }
       
-      if (isJidUser(m.sender)) {
+      if (isPnUser(m.sender)) {
         m.db.user = await prisma.User.findUnique({ where: { jid: m.sender } });
         if (m.db?.user && m.db.user?.pushName !== m.pushName) {
           consola.info(`[WA: ${m.sender}] Pushname changed from ${m.db.user.pushName} to ${m.pushName}`);
@@ -59,7 +59,7 @@ export default async function ({
       const $next = await _middleware(sock, m, middleware, commands);
       if (m.isGroup && m.db.group?.accessFeatures != 'everyone' && !m.isSenderAdmin) return;
       if(typeof $next == 'object' && !$next?.continueCommand) return;
-      if (commands.length > 0 && isJidUser(m.sender) && !m.db?.user) {
+      if (commands.length > 0 && isPnUser(m.sender) && !m.db?.user) {
         m.db.user = await prisma.User.create({
           data: {
             ...USER_DEFAULT,

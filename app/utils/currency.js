@@ -1,7 +1,7 @@
 import { prisma } from './prisma.js';
 import { USER_DEFAULT } from './schemaData.js';
 import * as luxon from 'luxon';
-import { isJidUser } from 'baileys';
+import { isPnUser } from 'baileys';
 import { consola } from 'consola';
 import EventEmitter from 'events';
 
@@ -82,7 +82,7 @@ class Currency {
    */
   async transfer({ fromJid, toJid, amount, description = null }) {
     // Input validation
-    if (!isJidUser(fromJid) || !isJidUser(toJid)) {
+    if (!isPnUser(fromJid) || !isPnUser(toJid)) {
       throw new Error(__('currency.invalidJid'));
     }
 
@@ -237,7 +237,7 @@ class Currency {
    * @returns {Promise<boolean>}
    */
   async mine({ jid, remainingMines = 1 }) {
-    if (!isJidUser(jid)) {
+    if (!isPnUser(jid)) {
       throw new Error(__('currency.invalidJid'));
     }
 

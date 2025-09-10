@@ -6,6 +6,6 @@ Command({
   alias: ['test'],
   // eslint-disable-next-line no-unused-vars
   run: async ({ sock, m, options }) => {
-    console.log(commands.entries());
+    console.log(m);
   }
 });

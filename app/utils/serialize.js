@@ -4,7 +4,7 @@ import {
   getContentType,
   isJidGroup,
   downloadMediaMessage,
-  isLidUser,
+  isLidUser
 } from 'baileys';
 import { consola } from 'consola';
 import { prisma } from '../utils/prisma.js';
@@ -28,15 +28,15 @@ export default async function ({ sock, WAMessage }) {
   const groupMetadata = isGroup ? await sock.getGroupCache(chat) : {};
   const dbGroup = isGroup ? await fetchGroupFromDatabase(groupMetadata) : null;
   
-  const senderJid = isGroup || broadcast ? (isLidUser(key.participant) ? key.participantPn : key.participant) : (key.fromMe ? jidNormalizedUser(sock?.user?.id) : chat);
-  const senderLid = isGroup || broadcast ? (isLidUser(key.participant) ? key.participant : key.participantLid) : (key.fromMe ? jidNormalizedUser(sock?.user?.id) : key.senderLid);
+  const senderJid = isGroup || broadcast ? (isLidUser(key.participant) ? jidNormalizedUser(key.participantAlt) : key.participant) : (key.fromMe ? botJid : isLidUser(key.remoteJid) ? jidNormalizedUser(key.remoteJidAlt) : key.remoteJid);
+  const senderLid = isGroup || broadcast ? (isLidUser(key.participant) ? key.participant : jidNormalizedUser(key.participantAlt)) : (key.fromMe ? botLid : isLidUser(key.remoteJid) ? key.remoteJid : jidNormalizedUser(key.remoteJidAlt));
   const sender = senderJid;
   
   const isSenderOwner = dbBot.owners.some((owner) => owner == sender?.split('@')[0]) || false;
 
   const mtype = getContentType(message);
-  const content = getMessageContent(message, dbBot);
-  const quoted = await getQuotedMessage({ message, key, botJid, sock, dbBot });
+  const content = getMessageContent(message, dbBot.prefixes);
+  const quoted = await getQuotedMessage({ message, key, botLid, sock, dbBot });
 
   return {
     key,
@@ -52,10 +52,10 @@ export default async function ({ sock, WAMessage }) {
     isGroup,
     isSenderBot: Boolean(senderJid === botJid),
     isSenderOwner,
-    isSenderSuperAdmin: isGroup && groupMetadata?.participants?.some((participant) => participant.jid === senderJid && participant.admin == 'superadmin') || isSenderOwner || false,
-    isSenderAdmin: isGroup && groupMetadata?.participants?.some((participant) => participant.jid === senderJid && (participant.admin == 'admin' || participant.admin == 'superadmin')) || isSenderOwner || false,
-    isBotSuperAdmin: isGroup && groupMetadata?.participants?.some((participant) => participant.jid === botJid && participant.admin == 'superadmin') || false,
-    isBotAdmin: isGroup && groupMetadata?.participants?.some((participant) => participant.jid === botJid && (participant.admin == 'admin' || participant.admin == 'superadmin')) || false,
+    isSenderSuperAdmin: isGroup && hasParticipantRole(groupMetadata, senderLid, ['superadmin']) || isSenderOwner || false,
+    isSenderAdmin: isGroup && hasParticipantRole(groupMetadata, senderLid, ['admin', 'superadmin']) || isSenderOwner || false,
+    isBotSuperAdmin: isGroup && hasParticipantRole(groupMetadata, botLid, ['superadmin']) || false,
+    isBotAdmin: isGroup && hasParticipantRole(groupMetadata, botLid, ['admin', 'superadmin']) || false,
 
     groupMetadata,
     content,
@@ -159,9 +159,8 @@ const getText = (message) => {
   );
 };
 
-const getMessageContent = (message, dbBot) => {
+const getMessageContent = (message, prefixes = []) => {
   const mtype = getContentType(message);
-  const prefixes = dbBot?.prefixes || [];
   const text = getText(message);
     
   return {
@@ -182,7 +181,7 @@ const getMessageContent = (message, dbBot) => {
   };
 };
 
-const getQuotedMessage = async ({ message, key, botJid, sock, dbBot }) => {
+const getQuotedMessage = async ({ message, key, botLid, sock, dbBot }) => {
   const mtype = getContentType(message);
   const messageContent = message?.[mtype];
   const contextInfo = messageContent?.contextInfo || null;
@@ -190,24 +189,19 @@ const getQuotedMessage = async ({ message, key, botJid, sock, dbBot }) => {
   if (!Quoted) return null;
   const quotedMessage = normalizeMessageContent(Quoted);
   const type = getContentType(quotedMessage);
-  const content = getMessageContent(quotedMessage, dbBot);
-
-  const participant = isJidGroup(key?.remoteJid) ? (await sock.getGroupCache(key?.remoteJid))?.participants?.find(p => isLidUser(contextInfo?.participant) ? p.lid == contextInfo.participant : p.jid == contextInfo.participant) : undefined;
-  const senderJid = isJidGroup(key?.remoteJid) ? participant?.jid : key?.remoteJid;
+  const content = getMessageContent(quotedMessage, dbBot.prefixes);
 
   return {
     key: {
       remoteJid: key?.remoteJid,
-      fromMe: Boolean(botJid == senderJid),
+      remoteJidAlt: undefined,
+      fromMe: Boolean(botLid == key?.remoteJid),
       id: contextInfo.stanzaId,
-      senderLid: isLidUser(contextInfo?.participant) && !isJidGroup(key?.remoteJid) ? contextInfo.participant : undefined,
-      senderPn: undefined,
-      participant: isJidGroup(key.remoteJid) ? contextInfo.participant : undefined,
-      participantPn: isJidGroup(key.remoteJid) ? participant?.jid : undefined,
-      participantLid: undefined
+      participant: isJidGroup(key?.remoteJid) ? contextInfo?.participant : undefined,
+      participantAlt: undefined
     },
     chat: key?.remoteJid,
-    sender: senderJid,
+    sender: contextInfo?.participant,
     content,
     mtype: type,
     message: quotedMessage,
@@ -249,4 +243,9 @@ const fetchGroupFromDatabase = async (groupMetadata) => {
       lang: groupMetadata?.owner_country_code == 'ID' ? 'id' : groupMetadata?.subjectOwnerJid?.startsWith('62') ? 'id' : groupMetadata?.subjectOwner?.startsWith('62') ? 'id' : 'en'
     },
   });
+};
+
+const hasParticipantRole = (groupMetadata, lid, role = []) => {
+  const participant = groupMetadata.participants.find((participant) => (groupMetadata.addressingMode == 'lid') ? participant.id === lid : participant.lid === lid);
+  return participant ? role.includes(participant?.admin || 'user') : false;
 };

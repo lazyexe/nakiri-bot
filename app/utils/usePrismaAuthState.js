@@ -1,5 +1,5 @@
 import { prisma } from './prisma.js';
-import { curve } from 'libsignal';
+import curve from 'baileys/node_modules/libsignal/src/curve.js';
 import { randomBytes, randomUUID } from 'crypto';
 
 const usePrismaAuthState = async ({ session, tableName = 'DeviceAuth' }) => {
