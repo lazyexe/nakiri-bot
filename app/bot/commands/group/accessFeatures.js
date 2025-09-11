@@ -1,4 +1,5 @@
 import { Command } from '../../../utils/command.js';
+import { prisma } from '../../../utils/prisma.js';
 
 Command({
   name: 'group-restrict-features',
