@@ -46,7 +46,6 @@ export const handler = async (sock, m, $next, commands) => {
   return $next;
 };
 
-
 const now = DateTime.now().setZone('Asia/Jakarta');
 let waktuHari;
 const hour = now.hour;

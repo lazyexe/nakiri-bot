@@ -7,7 +7,7 @@ import * as AnonymousChat from './AnonymousChat.js';
 import * as BlackJack from './blacjack.js';
 // import messageRecovery from './messageRecovery.js';
 // import nakiriOld from './old-nakiri.js';
-import nakiri from './nakiri.js';
+import * as nakiri from './nakiri.js';
 
 middleware.set('activityScore.js', activityScore);
 middleware.set('antiMention.js', antiMention);
