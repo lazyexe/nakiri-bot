@@ -22,13 +22,9 @@ export const handler = async (sock, m, $next, commands) => {
 
     let chatHistory = history.map((v) => `@${v.user}: ${v.message}`).join('\n');
 
-    const respons = await axios.post('https://openrouter.ai/api/v1/chat/completions', {
+    const respons = await axios.post('https://api.voids.top/v1/chat/completions', {
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: systemInstruction + chatHistory }, { role: 'user', content: `@${m.senderJid.split('@')[0]} : ` + m.content.text }],
-      model: 'deepseek/deepseek-chat-v3-0324:free',
-    }, {
-      headers: {
-        'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`
-      }
     });
 
     const aiReply = respons.data.choices[0].message.content.regexp(/<think>[\s\S]*?<\/think>/g, '').trim();
