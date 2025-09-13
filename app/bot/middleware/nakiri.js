@@ -26,7 +26,6 @@ export const handler = async (sock, m, $next, commands) => {
       model: 'gpt-4o',
       messages: [{ role: 'user', content: systemInstruction + chatHistory }, { role: 'user', content: `@${m.senderJid.split('@')[0]} : ` + m.content.text }],
     });
-    console.log(respons.data.choices[0]);
     const aiReply = respons.data.choices[0].message.content;
     if (aiReply) {
       history.push({ user: 'Nakiri', message: aiReply });
