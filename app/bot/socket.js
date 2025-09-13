@@ -45,10 +45,8 @@ export const createOrGet = async ({
     markOnlineOnConnect: true,
     generateHighQualityLinkPreview: true,
     syncFullHistory: false,
-    // shouldSyncHistoryMessage: (msg) => {
-    //   console.log(msg);
-    // },
-    cachedGroupMetadata: async (jid) => groupCache.get(jid) || null,
+    defaultQueryTimeoutMs: undefined,
+    keepAliveIntervalMs: 55000,
   });
 
   SESSIONS.set(id, sock);
